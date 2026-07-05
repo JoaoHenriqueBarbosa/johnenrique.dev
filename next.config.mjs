@@ -1,12 +1,29 @@
-import nextIntlPlugin from "next-intl/plugin";
+import createNextIntlPlugin from "next-intl/plugin";
+
+const withNextIntl = createNextIntlPlugin("./src/i18n/request.ts");
 
 /**
- * Create config wrapper required for using next-intl with RSCs.
- * See https://next-intl-docs.vercel.app/docs/getting-started/app-router-server-components
+ * `en` is served unprefixed at the root and `pt-BR` under its prefix,
+ * without any middleware: requests are rewritten into the `[locale]`
+ * segment at the routing layer and `/en/*` is canonicalized away.
  */
-const withNextIntl = nextIntlPlugin("./src/server/i18n.ts");
-
 /** @type {import('next').NextConfig} */
-const nextConfig = withNextIntl({});
+const nextConfig = {
+  async rewrites() {
+    return [
+      { source: "/", destination: "/en" },
+      {
+        source: "/:path((?!pt-BR(?:/|$)|api(?:/|$)|_next|_vercel|.*\\..*).*)",
+        destination: "/en/:path",
+      },
+    ];
+  },
+  async redirects() {
+    return [
+      { source: "/en", destination: "/", permanent: true },
+      { source: "/en/:path*", destination: "/:path*", permanent: true },
+    ];
+  },
+};
 
-export default nextConfig;
+export default withNextIntl(nextConfig);

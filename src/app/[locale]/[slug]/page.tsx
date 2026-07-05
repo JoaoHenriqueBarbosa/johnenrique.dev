@@ -2,7 +2,8 @@ import { MDXRemote } from "next-mdx-remote/rsc";
 import { promises as fs } from "fs";
 import path from "path";
 import { notFound } from "next/navigation";
-import { getTranslations, unstable_setRequestLocale } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
+import type { Locale } from "next-intl";
 import matter from "gray-matter";
 import { Header } from "@/components/home-page/header";
 import { Footer } from "@/components/home-page/footer";
@@ -16,15 +17,21 @@ import {
 } from "@/components/ui/breadcrumb";
 import Image from "next/image";
 
-export default async function Page({
-  params,
-}: {
-  params: { slug: string; locale: string };
-}) {
-  unstable_setRequestLocale(params.locale);
-  const contentDir = path.join(process.cwd(), "src", "content", params.locale);
-  console.log(contentDir);
-  const filePath = path.join(contentDir, `${params.slug}.mdx`);
+type Params = Promise<{ slug: string; locale: Locale }>;
+
+export async function generateStaticParams() {
+  const contentDir = path.join(process.cwd(), "src", "content", "en");
+  const files = await fs.readdir(contentDir);
+  return files
+    .filter((file) => file.endsWith(".mdx"))
+    .map((file) => ({ slug: file.replace(/\.mdx$/, "") }));
+}
+
+export default async function Page({ params }: { params: Params }) {
+  const { locale, slug } = await params;
+  setRequestLocale(locale);
+  const contentDir = path.join(process.cwd(), "src", "content", locale);
+  const filePath = path.join(contentDir, `${slug}.mdx`);
 
   const t = await getTranslations("common");
 
@@ -58,7 +65,7 @@ export default async function Page({
                   </BreadcrumbItem>
                   <BreadcrumbSeparator />
                   <BreadcrumbItem>
-                    <BreadcrumbPage>{params.slug}</BreadcrumbPage>
+                    <BreadcrumbPage>{slug}</BreadcrumbPage>
                   </BreadcrumbItem>
                 </BreadcrumbList>
               </Breadcrumb>
@@ -89,13 +96,11 @@ export default async function Page({
     throw error;
   }
 }
-export async function generateMetadata({
-  params,
-}: {
-  params: { slug: string; locale: string };
-}) {
-  const contentDir = path.join(process.cwd(), "src", "content", params.locale);
-  const filePath = path.join(contentDir, `${params.slug}.mdx`);
+
+export async function generateMetadata({ params }: { params: Params }) {
+  const { locale, slug } = await params;
+  const contentDir = path.join(process.cwd(), "src", "content", locale);
+  const filePath = path.join(contentDir, `${slug}.mdx`);
 
   if (!filePath.endsWith(".mdx")) {
     return {};
@@ -104,7 +109,7 @@ export async function generateMetadata({
   try {
     const source = await fs.readFile(filePath, "utf8");
     const { data } = matter(source);
-    const t = await getTranslations("common");
+    const t = await getTranslations({ locale, namespace: "common" });
 
     return {
       title: `${data.title} | ${t("meta.title")}`,
@@ -114,7 +119,7 @@ export async function generateMetadata({
         title: `${data.title} | ${t("meta.title")}`,
         description: data.description || t("meta.keywords"),
         type: "article",
-        url: `${process.env.NEXT_PUBLIC_SITE_URL}/${params.locale}/${params.slug}`,
+        url: `${process.env.NEXT_PUBLIC_SITE_URL}/${locale}/${slug}`,
         publishedTime: data.date ? new Date(data.date).toISOString() : undefined,
         images: data.cover
           ? [
@@ -135,7 +140,7 @@ export async function generateMetadata({
             ],
         siteName: t("meta.title"),
       },
-      canonical: `${process.env.NEXT_PUBLIC_SITE_URL}/${params.locale}/${params.slug}`,
+      canonical: `${process.env.NEXT_PUBLIC_SITE_URL}/${locale}/${slug}`,
       twitter: {
         card: "summary_large_image",
         title: `${data.title} | ${t("meta.title")}`,

@@ -1,7 +1,8 @@
 import { promises as fs } from "fs";
 import path from "path";
-import { Link } from "@/navigation";
-import { getTranslations, unstable_setRequestLocale } from "next-intl/server";
+import { Link } from "@/i18n/navigation";
+import { getTranslations, setRequestLocale } from "next-intl/server";
+import type { Locale } from "next-intl";
 import Image from "next/image";
 import { Header } from "@/components/home-page/header";
 import { Footer } from "@/components/home-page/footer";
@@ -14,7 +15,6 @@ import {
   BreadcrumbPage,
 } from "@/components/ui/breadcrumb";
 import matter from "gray-matter";
-import { LocaleRouteParams } from "../types";
 
 interface BlogPost {
   slug: string;
@@ -46,12 +46,13 @@ async function getBlogPosts(locale: string): Promise<BlogPost[]> {
 export default async function BlogIndex({
   params,
 }: {
-  params: { locale: string };
+  params: Promise<{ locale: Locale }>;
 }) {
-  unstable_setRequestLocale(params.locale);
+  const { locale } = await params;
+  setRequestLocale(locale);
   const t = await getTranslations("blogPage");
   const commonT = await getTranslations("common");
-  const blogPosts = await getBlogPosts(params.locale);
+  const blogPosts = await getBlogPosts(locale);
 
   return (
     <div className="flex flex-col min-h-dvh relative">
@@ -119,45 +120,16 @@ export default async function BlogIndex({
   );
 }
 
-export async function generateMetadata({                                                                                              
-  params: { locale, slug },                                                                                                           
-}: LocaleRouteParams & { params: { slug: string } }) {                                                                                
-  const contentDir = path.join(                                                                                                       
-    process.cwd(),                                                                                                                    
-    "src",                                                                                                                            
-    "content",                                                                                                                        
-    locale,                                                                                                                           
-    "projects"                                                                                                                        
-  );                                                                                                                                  
-  const filePath = path.join(contentDir, `${slug}.mdx`);                                                                              
-                                                                                                                                      
-  if (!filePath.endsWith(".mdx")) {                                                                                                   
-    return {};                                                                                                                        
-  }                                                                                                                                   
-                                                                                                                                      
-  try {                                                                                                                               
-    const file = await fs.readFile(filePath, "utf8");                                                                                 
-    const { data } = matter(file);                                                                                                    
-    const commonT = await getTranslations("common");                                                                                  
-                                                                                                                                      
-    return {                                                                                                                          
-      title: `${data.title} | ${commonT("meta.title")}`,                                                                              
-      description: data.description,                                                                                                  
-      keywords: data.keywords?.join(", "),                                                                                            
-      openGraph: {                                                                                                                    
-        title: `${data.title} | ${commonT("meta.title")}`,                                                                            
-        description: data.description,                                                                                                
-        type: "article",                                                                                                              
-        url: `${process.env.NEXT_PUBLIC_SITE_URL}/${locale}/projects/${slug}`,                                                                     
-        images: [`${process.env.NEXT_PUBLIC_SITE_URL}/${data.cover}`],
-      },                                                                                                                              
-      canonical: `${process.env.NEXT_PUBLIC_SITE_URL}/${locale}/projects/${slug}`,
-    };
-  } catch (error) {                                                                                                                   
-    if ((error as NodeJS.ErrnoException).code === "ENOENT") {                                                                         
-      return {};                                                                                                                      
-    }                                                                                                                                 
-    console.error(`Error reading file: ${filePath}`, error);                                                                          
-    throw error;                                                                                                                      
-  }                                                                                                                                   
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: Locale }>;
+}) {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "blogPage" });
+
+  return {
+    title: t("blogTitle"),
+    description: t("blogDescription"),
+  };
 }

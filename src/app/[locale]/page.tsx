@@ -1,61 +1,61 @@
 import { HomePage } from "@/components/home-page";
-import { cn } from "@/lib/utils";
-import { unstable_setRequestLocale, getTranslations } from "next-intl/server";
-import { Inter as FontSans } from "next/font/google";
+import { setRequestLocale, getTranslations } from "next-intl/server";
+import type { Locale } from "next-intl";
 
-const fontSans = FontSans({
-  subsets: ["latin"],
-  variable: "--font-sans",
-});
+import { Metadata } from "next";
 
-import { Metadata } from 'next';
-
-export async function generateMetadata({ params }: { params: { locale: string } }): Promise<Metadata> {
-  const t = await getTranslations('common');
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: Locale }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "common" });
   return {
-    title: t('meta.title'),
-    description: t('meta.description'),
-    keywords: t('meta.keywords'),
+    title: t("meta.title"),
+    description: t("meta.description"),
+    keywords: t("meta.keywords"),
     openGraph: {
-      title: t('meta.title'),
-      description: t('meta.description'),
-      type: 'website',
-      url: `${process.env.NEXT_PUBLIC_SITE_URL}/${params.locale}`,
+      title: t("meta.title"),
+      description: t("meta.description"),
+      type: "website",
+      url: `${process.env.NEXT_PUBLIC_SITE_URL}/${locale}`,
       images: [
         {
           url: `${process.env.NEXT_PUBLIC_SITE_URL}/john.jpg`,
           width: 1200,
           height: 630,
-          alt: t('meta.title'),
+          alt: t("meta.title"),
         },
       ],
-      siteName: t('meta.title'),
+      siteName: t("meta.title"),
     },
     alternates: {
-      canonical: `${process.env.NEXT_PUBLIC_SITE_URL}/${params.locale}`,
+      canonical: `${process.env.NEXT_PUBLIC_SITE_URL}/${locale}`,
     },
     twitter: {
-      card: 'summary_large_image',
-      title: t('meta.title'),
-      description: t('meta.description'),
+      card: "summary_large_image",
+      title: t("meta.title"),
+      description: t("meta.description"),
       images: [
         {
           url: `${process.env.NEXT_PUBLIC_SITE_URL}/john.jpg`,
           width: 1200,
           height: 630,
-          alt: t('meta.title'),
+          alt: t("meta.title"),
         },
       ],
     },
   };
 }
 
-export default async function Page({ params }: { params: { locale: string } }) {
-  unstable_setRequestLocale(params.locale);
+export default async function Page({
+  params,
+}: {
+  params: Promise<{ locale: Locale }>;
+}) {
+  const { locale } = await params;
+  setRequestLocale(locale);
 
-  return (
-    <div className={cn("min-h-screen bg-background font-sans antialiased", fontSans.variable)}>
-      <HomePage />
-    </div>
-  );
+  return <HomePage />;
 }

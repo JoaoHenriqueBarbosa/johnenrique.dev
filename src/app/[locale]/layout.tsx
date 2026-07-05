@@ -1,76 +1,57 @@
 import type { PropsWithChildren } from "react";
 import "@/globals.css";
-import { locales } from "@/i18n";
-import { getMessages, unstable_setRequestLocale } from "next-intl/server";
-import { NextIntlClientProvider } from "next-intl";
+import { hasLocale, NextIntlClientProvider } from "next-intl";
+import { setRequestLocale } from "next-intl/server";
+import { notFound } from "next/navigation";
+import { Analytics } from "@vercel/analytics/next";
+import { Inter } from "next/font/google";
 import { cn } from "@/lib/utils";
-import { Inter as FontSans } from "next/font/google";
-import JEAnalytics from "@/components/analytics";
+import { routing } from "@/i18n/routing";
 
-const fontSans = FontSans({
+const fontSans = Inter({
   subsets: ["latin"],
-  variable: "--font-sans",
+  variable: "--font-inter",
 });
 
 export function generateStaticParams() {
-  return locales.map((locale) => ({ locale }));
+  return routing.locales.map((locale) => ({ locale }));
 }
+
+export const metadata = {
+  icons: {
+    icon: [
+      { url: "/icons/16.ico", sizes: "16x16" },
+      { url: "/icons/32.ico", sizes: "32x32" },
+      { url: "/icons/48.png", type: "image/png", sizes: "48x48" },
+      { url: "/icons/96.png", type: "image/png", sizes: "96x96" },
+      { url: "/icons/192.png", type: "image/png", sizes: "192x192" },
+      { url: "/icons/512.png", type: "image/png", sizes: "512x512" },
+    ],
+    apple: [{ url: "/icons/180.png", type: "image/png", sizes: "180x180" }],
+  },
+};
 
 export default async function RootLayout({
   children,
-  params: { locale },
-}: PropsWithChildren<{ params: { locale: string } }>) {
-  unstable_setRequestLocale(locale);
-  const messages = await getMessages({ locale });
+  params,
+}: PropsWithChildren<{ params: Promise<{ locale: string }> }>) {
+  const { locale } = await params;
+  if (!hasLocale(routing.locales, locale)) {
+    notFound();
+  }
+  setRequestLocale(locale);
+
   return (
     <html lang={locale}>
-      <head>
-        <link rel="shortcut icon" type="image/x-icon" href="/icons/16.ico" />
-        <link
-          rel="icon"
-          href="/icons/16.ico"
-          type="image/x-icon"
-          sizes="16x16"
-        />
-        <link
-          rel="icon"
-          href="/icons/32.ico"
-          type="image/x-icon"
-          sizes="32x32"
-        />
-        <link rel="icon" href="/icons/48.png" type="image/png" sizes="48x48" />
-        <link rel="icon" href="/icons/57.png" type="image/png" sizes="57x57" />
-        <link rel="icon" href="/icons/96.png" type="image/png" sizes="96x96" />
-        <link
-          rel="apple-touch-icon"
-          href="/icons/180.png"
-          type="image/png"
-          sizes="180x180"
-        />
-        <link
-          rel="icon"
-          href="/icons/192.png"
-          type="image/png"
-          sizes="192x192"
-        />
-        <link
-          rel="icon"
-          href="/icons/512.png"
-          type="image/png"
-          sizes="512x512"
-        />
-        <JEAnalytics GA_TRACKING_ID={process.env.GA_TRACKING_ID} />
-      </head>
-      <NextIntlClientProvider messages={messages}>
-        <body
-          className={cn(
-            "min-h-screen font-sans antialiased bg-muted",
-            fontSans.variable
-          )}
-        >
-          {children}
-        </body>
-      </NextIntlClientProvider>
+      <body
+        className={cn(
+          "min-h-screen font-sans antialiased bg-muted",
+          fontSans.variable
+        )}
+      >
+        <NextIntlClientProvider>{children}</NextIntlClientProvider>
+        <Analytics />
+      </body>
     </html>
   );
 }

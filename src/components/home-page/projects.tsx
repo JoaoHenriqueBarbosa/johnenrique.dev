@@ -8,7 +8,7 @@ import { useTranslations, useLocale } from "next-intl";
 import enProjects from "@/content/en/projects";
 import ptBRProjects from "@/content/pt-BR/projects";
 import { buttonVariants } from "../ui/button";
-import { Link } from "@/navigation";
+import { Link } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
 
 export type Project = {

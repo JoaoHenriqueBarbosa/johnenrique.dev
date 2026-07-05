@@ -1,13 +1,13 @@
 "use client";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { Link } from "@/navigation";
+import { Link } from "@/i18n/navigation";
 import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import { useTranslations } from "next-intl";
 import { LanguageSwitcher } from "@/components/language-switcher";
-import { usePathname } from "@/navigation";
+import { usePathname } from "@/i18n/navigation";
 
 export function Header() {
   const [scroll, setScroll] = useState(false);
@@ -150,7 +150,7 @@ export function Header() {
   );
 }
 
-function MenuIcon(props: React.SVGProps<SVGSVGElement>): JSX.Element {
+function MenuIcon(props: React.SVGProps<SVGSVGElement>): React.JSX.Element {
   return (
     <svg
       {...props}

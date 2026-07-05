@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { useWordTyper } from "@/hooks/useWordTyper";
 import { useTranslations } from 'next-intl';
-import { Link } from "@/navigation";
+import { Link } from "@/i18n/navigation";
 import { buttonVariants } from "../ui/button";
 
 export function Hero() {

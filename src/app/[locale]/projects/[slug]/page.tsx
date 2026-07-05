@@ -1,9 +1,9 @@
-import { unstable_setRequestLocale, getTranslations } from "next-intl/server";
+import { setRequestLocale, getTranslations } from "next-intl/server";
+import type { Locale } from "next-intl";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import { projects as enProjects } from "@/content/en/projects";
 import { projects as ptBRProjects } from "@/content/pt-BR/projects";
-import { LocaleRouteParams } from "@/app/[locale]/types";
 import { Header } from "@/components/home-page/header";
 import { Footer } from "@/components/home-page/footer";
 import {
@@ -25,14 +25,12 @@ import { buttonVariants } from "@/components/ui/button";
 import { Readme } from "@/components/readme";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 import { AlertCircleIcon } from "lucide-react";
-import { promises as fs } from "fs";
-import path from "path";
-import matter from "gray-matter";
 
-export default async function ProjectPage({
-  params: { locale, slug },
-}: LocaleRouteParams & { params: { slug: string } }) {
-  unstable_setRequestLocale(locale);
+type Params = Promise<{ slug: string; locale: Locale }>;
+
+export default async function ProjectPage({ params }: { params: Params }) {
+  const { locale, slug } = await params;
+  setRequestLocale(locale);
   const t = await getTranslations("projectPage");
   const commonT = await getTranslations("common");
 
@@ -199,9 +197,9 @@ export function generateStaticParams() {
     slug: project.slug,
   }));
 }
-export async function generateMetadata({
-  params: { locale, slug },
-}: LocaleRouteParams & { params: { slug: string } }) {
+
+export async function generateMetadata({ params }: { params: Params }) {
+  const { locale, slug } = await params;
   const projects = locale === "en" ? enProjects : ptBRProjects;
   const project = projects.find((p) => p.slug === slug);
 
@@ -209,7 +207,7 @@ export async function generateMetadata({
     return {};
   }
 
-  const commonT = await getTranslations("common");
+  const commonT = await getTranslations({ locale, namespace: "common" });
 
   return {
     title: `${project.title} | ${commonT("meta.title")}`,
