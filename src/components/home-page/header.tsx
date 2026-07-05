@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { LocaleSwitcher } from "@/components/locale-switcher";
@@ -12,9 +13,14 @@ export function Header() {
     <header className="fixed inset-x-0 top-0 z-30 border-b bg-background/90 backdrop-blur-sm">
       <div className="container flex h-14 max-w-5xl items-center justify-between gap-4">
         <Link href="/" className="flex items-center gap-2.5">
-          <span className="grid size-7 place-items-center rounded-md bg-primary font-mono text-[11px] font-bold text-primary-foreground">
-            JE
-          </span>
+          <Image
+            src="/john-avatar.webp"
+            alt={t("name")}
+            width={28}
+            height={28}
+            priority
+            className="size-7 rounded-full object-cover ring-1 ring-border"
+          />
           <span className="text-sm font-semibold tracking-tight">
             {t("name")}
           </span>

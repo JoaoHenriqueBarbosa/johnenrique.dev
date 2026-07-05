@@ -53,10 +53,7 @@ export function Hero() {
         >
           <a
             href={`mailto:${site.email}`}
-            className={cn(
-              buttonVariants({ size: "lg" }),
-              "px-6 font-semibold"
-            )}
+            className={cn(buttonVariants({ size: "lg" }), "px-6 font-semibold")}
           >
             {t("ctaPrimary")}
           </a>
