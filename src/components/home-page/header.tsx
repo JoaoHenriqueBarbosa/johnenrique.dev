@@ -21,27 +21,27 @@ export function Header() {
             priority
             className="size-7 rounded-full object-cover ring-1 ring-border"
           />
-          <span className="text-sm font-semibold tracking-tight">
+          <span className="hidden text-sm font-semibold tracking-tight xs:inline">
             {t("name")}
           </span>
         </Link>
-        <nav className="flex items-center gap-5 text-sm">
+        <nav className="flex items-center gap-4 text-sm sm:gap-5">
           <Link
             // @ts-expect-error hash anchor outside typed pathnames
             href="/#work"
-            className="hidden text-muted-foreground transition-colors hover:text-foreground sm:block"
+            className="hidden text-muted-foreground transition-colors hover:text-foreground xs:block"
           >
             {t("nav.work")}
           </Link>
           <Link
             href="/blog"
-            className="hidden text-muted-foreground transition-colors hover:text-foreground sm:block"
+            className="text-muted-foreground transition-colors hover:text-foreground"
           >
             {t("nav.writing")}
           </Link>
           <Link
             href="/about"
-            className="hidden text-muted-foreground transition-colors hover:text-foreground sm:block"
+            className="text-muted-foreground transition-colors hover:text-foreground"
           >
             {t("nav.about")}
           </Link>

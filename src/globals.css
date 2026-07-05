@@ -1,6 +1,10 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
+@theme {
+  --breakpoint-xs: 30rem;
+}
+
 :root {
   --background: oklch(0.145 0.008 255);
   --foreground: oklch(0.93 0.006 255);
