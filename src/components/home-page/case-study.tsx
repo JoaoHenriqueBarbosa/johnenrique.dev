@@ -11,7 +11,7 @@ export function CaseStudy() {
   ];
 
   return (
-    <section id="case-study" className="border-t">
+    <section id="case-study" data-section="case-study" className="border-t">
       <div className="container max-w-5xl py-20 md:py-28">
         <p className="font-mono text-[11px] tracking-widest text-muted-foreground uppercase">
           02 — {t("label")}
@@ -44,6 +44,9 @@ export function CaseStudy() {
         <p className="mt-4">
           <Link
             href={{ pathname: "/blog/[slug]", params: { slug: "fiscal-rs" } }}
+            data-track="story_click"
+            data-tp-slug="fiscal-rs"
+            data-tp-from="case-study"
             className="text-sm font-medium text-primary underline-offset-4 hover:underline"
           >
             {t("cta")}

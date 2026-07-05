@@ -49,6 +49,9 @@ export function Header() {
             href={site.github}
             target="_blank"
             rel="noopener noreferrer"
+            data-track="outbound_click"
+            data-tp-kind="github"
+            data-tp-location="header"
             className="hidden text-muted-foreground transition-colors hover:text-foreground md:block"
           >
             {t("nav.github")}
@@ -59,6 +62,9 @@ export function Header() {
           <LocaleSwitcher />
           <a
             href={`mailto:${site.email}`}
+            data-track="contact_intent"
+            data-tp-method="mailto"
+            data-tp-location="header"
             className={cn(buttonVariants({ size: "sm" }), "font-semibold")}
           >
             {t("cta")}

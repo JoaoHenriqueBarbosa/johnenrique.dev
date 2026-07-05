@@ -5,6 +5,7 @@ import { setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { Analytics } from "@vercel/analytics/next";
 import { WebMCP } from "@/components/web-mcp";
+import { Tracker } from "@/components/tracker";
 import { Schibsted_Grotesk, JetBrains_Mono } from "next/font/google";
 import { cn } from "@/lib/utils";
 import { routing } from "@/i18n/routing";
@@ -68,6 +69,7 @@ export default async function RootLayout({
         {/* Client islands only need the locale, never message strings */}
         <NextIntlClientProvider messages={{}}>{children}</NextIntlClientProvider>
         <WebMCP />
+        <Tracker />
         <Analytics />
       </body>
     </html>

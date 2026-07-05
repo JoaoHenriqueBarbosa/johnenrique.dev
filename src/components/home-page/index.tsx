@@ -4,6 +4,7 @@ import { Work } from "./work";
 import { CaseStudy } from "./case-study";
 import { Contact } from "./contact";
 import { Footer } from "./footer";
+import { SectionTracker } from "@/components/section-tracker";
 
 export function HomePage() {
   return (
@@ -16,6 +17,7 @@ export function HomePage() {
         <Contact />
       </main>
       <Footer />
+      <SectionTracker />
     </div>
   );
 }

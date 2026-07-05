@@ -15,6 +15,9 @@ export function Footer() {
             href={site.github}
             target="_blank"
             rel="noopener noreferrer"
+            data-track="outbound_click"
+            data-tp-kind="github"
+            data-tp-location="footer"
             className="transition-colors hover:text-foreground"
           >
             GitHub
@@ -23,12 +26,18 @@ export function Footer() {
             href={site.linkedin}
             target="_blank"
             rel="noopener noreferrer"
+            data-track="outbound_click"
+            data-tp-kind="linkedin"
+            data-tp-location="footer"
             className="transition-colors hover:text-foreground"
           >
             LinkedIn
           </a>
           <a
             href={`mailto:${site.email}`}
+            data-track="contact_intent"
+            data-tp-method="mailto"
+            data-tp-location="footer"
             className="transition-colors hover:text-foreground"
           >
             Email
@@ -37,6 +46,9 @@ export function Footer() {
             href={site.repo}
             target="_blank"
             rel="noopener noreferrer"
+            data-track="outbound_click"
+            data-tp-kind="repo"
+            data-tp-location="footer"
             className="transition-colors hover:text-foreground"
           >
             {t("source")}

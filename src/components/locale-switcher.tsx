@@ -5,6 +5,7 @@ import { useParams } from "next/navigation";
 import { Link, usePathname } from "@/i18n/navigation";
 import { routing } from "@/i18n/routing";
 import { cn } from "@/lib/utils";
+import { track } from "@/lib/tracking/client";
 
 const labels = { "en": "EN", "pt-BR": "PT" } as const;
 
@@ -22,6 +23,9 @@ export function LocaleSwitcher() {
             // pathname+params reproduce the current route in the other locale
             href={{ pathname, params } as never}
             locale={l}
+            onClick={() => {
+              if (l !== locale) track("locale_switch", { from: locale, to: l });
+            }}
             className={cn(
               "px-0.5 transition-colors",
               l === locale

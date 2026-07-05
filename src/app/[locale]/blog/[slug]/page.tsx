@@ -8,6 +8,7 @@ import { Link } from "@/i18n/navigation";
 import { JsonLd } from "@/components/json-ld";
 import { Header } from "@/components/home-page/header";
 import { Footer } from "@/components/home-page/footer";
+import { ReadProgressTracker } from "@/components/read-progress-tracker";
 import {
   Breadcrumb,
   BreadcrumbList,
@@ -129,6 +130,7 @@ export default async function BlogPost({ params }: { params: Params }) {
           </p>
         </main>
         <Footer />
+        <ReadProgressTracker slug={slug} />
       </div>
     );
   } catch (error) {

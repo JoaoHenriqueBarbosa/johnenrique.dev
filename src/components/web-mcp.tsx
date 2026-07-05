@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import { site } from "@/lib/site";
 import { proof } from "@/content/en/repos";
+import { track } from "@/lib/tracking/client";
 
 type WebMCPTool = {
   name: string;
@@ -61,13 +62,15 @@ export function WebMCP() {
           additionalProperties: false,
         },
         annotations: { readOnlyHint: true },
-        execute: () =>
+        execute: () => (
+          track("webmcp_tool_call", { tool: "get_contact" }),
           [
             `Email: ${site.email}`,
             `GitHub: ${site.github}`,
             `LinkedIn: ${site.linkedin}`,
             `Website: https://johnenrique.tech`,
-          ].join("\n"),
+          ].join("\n")
+        ),
       });
 
       await ctx.registerTool({
@@ -80,7 +83,8 @@ export function WebMCP() {
           additionalProperties: false,
         },
         annotations: { readOnlyHint: true },
-        execute: () =>
+        execute: () => (
+          track("webmcp_tool_call", { tool: "get_profile" }),
           [
             "Name: John Enrique (João Henrique Barbosa)",
             "Role: Senior Full-Stack Engineer — 9 years shipping web systems end to end",
@@ -91,7 +95,8 @@ export function WebMCP() {
               .map((p) => `${p.label} — ${p.value} (${p.href})`)
               .join("; ")}`,
             "Full picture: https://johnenrique.tech/llms.txt",
-          ].join("\n"),
+          ].join("\n")
+        ),
       });
 
       await ctx.registerTool({
@@ -121,6 +126,7 @@ export function WebMCP() {
         execute: async (inputs) => {
           const query = String(inputs.query ?? "").toLowerCase().trim();
           const locale = inputs.locale === "pt-BR" ? "pt-BR" : "en";
+          track("webmcp_tool_call", { tool: "search_blog_posts", query: query.slice(0, 80) });
           if (!query) return "Empty query.";
           const posts = await loadPosts();
           const terms = query.split(/\s+/);

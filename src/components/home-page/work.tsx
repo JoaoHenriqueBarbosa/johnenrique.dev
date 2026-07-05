@@ -14,7 +14,7 @@ export function Work() {
   const archive = repos.filter((r) => r.tier === "archive");
 
   return (
-    <section id="work" className="border-t">
+    <section id="work" data-section="work" className="border-t">
       <div className="container max-w-5xl py-20 md:py-28">
         <p className="font-mono text-[11px] tracking-widest text-muted-foreground uppercase">
           01 — {t("label")}
@@ -51,6 +51,10 @@ export function Work() {
                     target="_blank"
                     rel="noopener noreferrer"
                     title={item.tagline}
+                    data-track="project_click"
+                    data-tp-project={item.name}
+                    data-tp-label={item.links[0].label}
+                    data-tp-tier="archive"
                     className="font-mono text-xs text-muted-foreground transition-colors hover:text-foreground"
                   >
                     {item.name}
@@ -109,6 +113,9 @@ function FeaturedItem({
                   pathname: "/blog/[slug]",
                   params: { slug: item.postSlug },
                 }}
+                data-track="story_click"
+                data-tp-slug={item.postSlug}
+                data-tp-from="work"
                 className="text-sm font-medium text-primary underline-offset-4 hover:underline"
               >
                 {storyLabel}
@@ -124,6 +131,10 @@ function FeaturedItem({
                 href={link.href}
                 target="_blank"
                 rel="noopener noreferrer"
+                data-track="project_click"
+                data-tp-project={item.name}
+                data-tp-label={link.label}
+                data-tp-tier={item.tier}
                 className="text-sm font-medium text-primary underline-offset-4 hover:underline"
               >
                 {link.label}
@@ -168,6 +179,9 @@ function MiniItem({
               pathname: "/blog/[slug]",
               params: { slug: item.postSlug },
             }}
+            data-track="story_click"
+            data-tp-slug={item.postSlug}
+            data-tp-from="work"
             className="font-mono text-[11px] font-medium text-primary underline-offset-4 hover:underline"
           >
             {storyLabel} →
@@ -179,6 +193,10 @@ function MiniItem({
             href={link.href}
             target="_blank"
             rel="noopener noreferrer"
+            data-track="project_click"
+            data-tp-project={item.name}
+            data-tp-label={link.label}
+            data-tp-tier={item.tier}
             className="font-mono text-[11px] text-muted-foreground transition-colors hover:text-foreground"
           >
             {link.label} ↗

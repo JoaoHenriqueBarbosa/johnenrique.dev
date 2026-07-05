@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { CheckIcon, CopyIcon } from "lucide-react";
 import { site } from "@/lib/site";
+import { track } from "@/lib/tracking/client";
 
 export function CopyEmail({
   copyLabel,
@@ -18,6 +19,7 @@ export function CopyEmail({
       type="button"
       onClick={async () => {
         await navigator.clipboard.writeText(site.email);
+        track("contact_intent", { method: "copy", location: "contact" });
         setCopied(true);
         setTimeout(() => setCopied(false), 2000);
       }}

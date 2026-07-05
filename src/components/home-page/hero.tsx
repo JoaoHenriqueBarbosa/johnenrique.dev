@@ -53,6 +53,9 @@ export function Hero() {
         >
           <a
             href={`mailto:${site.email}`}
+            data-track="contact_intent"
+            data-tp-method="mailto"
+            data-tp-location="hero"
             className={cn(buttonVariants({ size: "lg" }), "px-6 font-semibold")}
           >
             {t("ctaPrimary")}
@@ -61,6 +64,9 @@ export function Hero() {
             href={site.github}
             target="_blank"
             rel="noopener noreferrer"
+            data-track="outbound_click"
+            data-tp-kind="github"
+            data-tp-location="hero"
             className={cn(buttonVariants({ variant: "outline", size: "lg" }))}
           >
             {t("ctaSecondary")}
@@ -83,6 +89,9 @@ export function Hero() {
                   href={item.href}
                   target="_blank"
                   rel="noopener noreferrer"
+                  data-track="proof_click"
+                  data-tp-label={item.label}
+                  data-tp-href={item.href}
                   className="group font-mono text-sm text-muted-foreground transition-colors hover:text-foreground"
                 >
                   {item.label}{" "}

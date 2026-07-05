@@ -2,12 +2,13 @@ import { promises as fs } from "fs";
 import path from "path";
 import matter from "gray-matter";
 import { repos, proof } from "@/content/en/repos";
+import { trackServer } from "@/lib/tracking/server";
 
 const BASE = process.env.NEXT_PUBLIC_SITE_URL ?? "https://johnenrique.tech";
 
-export const dynamic = "force-static";
+export const dynamic = "force-dynamic";
 
-export async function GET() {
+export async function GET(req: Request) {
   const blogDir = path.join(process.cwd(), "src", "content", "en", "blog");
   const files = await fs.readdir(blogDir);
   const posts = await Promise.all(
@@ -65,7 +66,18 @@ export async function GET() {
     "",
   ];
 
+  const ua = req.headers.get("user-agent");
+  trackServer("llms_txt_fetch", {
+    path: "/llms.txt",
+    ua,
+    country: req.headers.get("x-vercel-ip-country"),
+    props: { ua: ua?.slice(0, 200) ?? null },
+  });
+
   return new Response(lines.join("\n"), {
-    headers: { "Content-Type": "text/plain; charset=utf-8" },
+    headers: {
+      "Content-Type": "text/plain; charset=utf-8",
+      "Cache-Control": "public, max-age=0, s-maxage=3600, stale-while-revalidate=86400",
+    },
   });
 }
