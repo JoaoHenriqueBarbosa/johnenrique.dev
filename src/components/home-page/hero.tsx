@@ -1,37 +1,101 @@
-import Image from "next/image";
-import { useWordTyper } from "@/hooks/useWordTyper";
-import { useTranslations } from 'next-intl';
-import { Link } from "@/i18n/navigation";
-import { buttonVariants } from "../ui/button";
+import { useLocale, useTranslations } from "next-intl";
+import { buttonVariants } from "@/components/ui/button";
+import { proof as enProof } from "@/content/en/repos";
+import { proof as ptBRProof } from "@/content/pt-BR/repos";
+import { site } from "@/lib/site";
+import { cn } from "@/lib/utils";
 
 export function Hero() {
-  const t = useTranslations('hero');
-  const word = useWordTyper(t('typedWords').split(','));
+  const t = useTranslations("hero");
+  const locale = useLocale();
+  const proof = locale === "pt-BR" ? ptBRProof : enProof;
 
   return (
-    <section className="relative w-full">
-      <Image
-        src="/holo.webp"
-        alt="Hero Image"
-        width={1120}
-        height={630}
-        quality={100}
-        className="h-[600px] sm:h-[500px] w-full object-cover object-center md:h-[600px]"
+    <section className="relative overflow-hidden">
+      <div
+        aria-hidden
+        className="bg-grid-dots pointer-events-none absolute inset-0 [mask-image:radial-gradient(ellipse_70%_60%_at_50%_0%,black,transparent)]"
       />
-      <div className="absolute inset-0 bg-gradient-to-t to-60% from-muted/100 to-muted/0" />
-      <div className="container absolute inset-0 flex flex-col items-center justify-center sm:px-4 text-center">
-        <h1 className="text-3xl font-bold tracking-tight text-black md:text-5xl drop-shadow-xl">
-          {t('heading')}<br/>{word}<span className="border-r-4 border-gray-800 animate-blink inline-block ">&nbsp;</span>
-        </h1>
-        <p className="mt-4 max-w-xl text-black md:text-xl drop-shadow-xl">
-          {t('description')}
+      <div className="container relative max-w-5xl pt-32 pb-16 md:pt-44 md:pb-24">
+        <p
+          className="animate-rise flex flex-wrap items-center gap-x-3 gap-y-1 font-mono text-xs tracking-wide text-muted-foreground uppercase"
+          style={{ "--rise-delay": "0ms" } as React.CSSProperties}
+        >
+          <span className="flex items-center gap-2 text-success">
+            <span className="animate-pulse-dot size-1.5 rounded-full bg-success" />
+            {t("availability")}
+          </span>
+          <span aria-hidden>·</span>
+          <span>{t("location")}</span>
         </p>
-        <div className="mt-8">
-          <Link
-            // @ts-ignore
-            href="/#projects"
-            className={buttonVariants({ size: "lg" })}
-          >{t('cta')}</Link>
+        <h1
+          className="animate-rise mt-7 text-5xl font-bold tracking-tighter text-balance sm:text-6xl md:text-7xl"
+          style={{ "--rise-delay": "60ms" } as React.CSSProperties}
+        >
+          {t("name")}
+          <span className="block text-muted-foreground">{t("role")}</span>
+        </h1>
+        <p
+          className="animate-rise mt-7 max-w-2xl text-base leading-relaxed text-muted-foreground md:text-lg"
+          style={{ "--rise-delay": "120ms" } as React.CSSProperties}
+        >
+          {t("description")}
+        </p>
+        <p
+          className="animate-rise mt-5 font-mono text-xs tracking-wide text-muted-foreground/80 md:text-sm"
+          style={{ "--rise-delay": "180ms" } as React.CSSProperties}
+        >
+          {t("stack")}
+        </p>
+        <div
+          className="animate-rise mt-9 flex flex-wrap items-center gap-3"
+          style={{ "--rise-delay": "240ms" } as React.CSSProperties}
+        >
+          <a
+            href={`mailto:${site.email}`}
+            className={cn(
+              buttonVariants({ size: "lg" }),
+              "px-6 font-semibold"
+            )}
+          >
+            {t("ctaPrimary")}
+          </a>
+          <a
+            href={site.github}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={cn(buttonVariants({ variant: "outline", size: "lg" }))}
+          >
+            {t("ctaSecondary")}
+            <span aria-hidden className="ml-1.5 text-xs">
+              ↗
+            </span>
+          </a>
+        </div>
+        <div
+          className="animate-rise mt-16 border-t pt-6"
+          style={{ "--rise-delay": "300ms" } as React.CSSProperties}
+        >
+          <p className="font-mono text-[11px] tracking-widest text-muted-foreground/70 uppercase">
+            {t("proofLabel")}
+          </p>
+          <ul className="mt-3 flex flex-wrap gap-x-8 gap-y-2">
+            {proof.map((item) => (
+              <li key={item.label}>
+                <a
+                  href={item.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group font-mono text-sm text-muted-foreground transition-colors hover:text-foreground"
+                >
+                  {item.label}{" "}
+                  <span className="font-semibold text-foreground group-hover:text-primary">
+                    {item.value}
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
     </section>

@@ -1,0 +1,21 @@
+---
+title: "perceptrons: redes neurais do zero, uma era histórica por vez"
+description: "Do perceptron de Rosenblatt (1957) a MLPs com feedback human-in-the-loop — backpropagation em numpy puro, com um canvas React pra desenhar as entradas."
+date: 2026-07-05
+author: John Enrique
+keywords: [python, numpy, redes-neurais, backpropagation, educação, react]
+---
+
+O perceptrons é meu currículo de redes neurais, autoimposto: reimplementar a história da área do zero, em ordem, entendendo por que cada geração existe ao bater na parede que motivou a seguinte.
+
+Começa onde a área começou — o **perceptron de Rosenblatt, 1957**: um neurônio de limiar binário com a regra de aprendizado original, mais codificação binária de saída pra esticar N neurônios em 2^N classes. Aí você bate na parede no horário marcado: função degrau não tem gradiente, e problema linearmente inseparável (o famoso XOR) simplesmente não cai. A fase seguinte responde com perceptrons multicamada e **backpropagation escrito por extenso em numpy puro** — forward pass, regra da cadeia, atualização de pesos, sem autograd, sem framework. Se você não consegue implementar a regra da cadeia com operações de array, não pode dizer que entende backprop; essa foi a régua que eu me impus.
+
+## Desenhe e veja aprender
+
+A parte que faz disso mais que um exercício: um frontend React com canvas 16×16 onde você **desenha os padrões de entrada** e vê a rede classificar ao vivo. A fase human-in-the-loop vai além — corrija os erros da rede e ela aprende do seu feedback em tempo real. O treino deixa de ser uma curva de loss abstrata e vira algo que se cutuca com o dedo. Por baixo é tudo multiplicação de matrizes e não-linearidades elemento a elemento — a mesma álgebra linear que eu sigo estudando no papel, aqui com um rosto.
+
+## Onde isso se encaixa
+
+É educacional por design e rotulado como tal — é o rodapé do meu portfólio, não um pilar, e eu não me vendo como engenheiro de ML por causa dele. O que ele demonstra é o hábito que atravessa todo o resto que eu construo (layout engines, sistemas de reatividade, loops de agente): **quando quero entender um mecanismo, eu implemento o mecanismo**. O empacotamento full-stack — núcleo Python, rosto React — é só o jeito de tornar o entendimento visível.
+
+[GitHub](https://github.com/JoaoHenriqueBarbosa/perceptrons)

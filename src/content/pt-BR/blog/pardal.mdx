@@ -1,0 +1,23 @@
+---
+title: "pardal: um layout engine estilo Clay que renderiza PDF"
+description: "Resolução de restrições estilo flexbox em TypeScript, em produção gerando documentos reais — e o bug de renderização que peguei olhando o output em vez do exit code."
+date: 2026-07-05
+author: John Enrique
+keywords: [typescript, layout-engine, pdf, clay, npm]
+---
+
+O pardal deixa você descrever um documento como uma árvore de caixas aninhadas — cresça pra preencher, ajuste ao conteúdo, ocupe 50%, meça exatos 120pt — e computa a geometria absoluta por um algoritmo de layout multipass, pintando o resultado num PDF via PDFKit. O núcleo de layout é modelado de perto no [Clay](https://github.com/nicbarker/clay) do Nic Barker: os tipos de sizing, a direção row/column, a grade de alinhamento de filhos e a estrutura de passadas top-down/bottom-up espelham a abordagem do Clay, redirecionada de telas pra saída PDF paginada.
+
+Está publicado no npm e paga o próprio aluguel: eu uso em produção pra gerar documentos de verdade.
+
+## Por que multipass não é palavra de efeito
+
+As passadas existem porque as restrições puxam em direções opostas. Sizing *fit* depende dos filhos (a caixa envolve o conteúdo); sizing *grow* depende do pai (a caixa preenche o que sobrou). Não dá pra resolver os dois numa caminhada só — você itera top-down e bottom-up até o sistema convergir. `grow` distribui espaço livre por normalização proporcional (`espaço × peso / Σpesos`), `percent` é multiplicação por escalar contra o pai. É resolução de restrições por passadas sucessivas — o mesmo formato do algoritmo do Clay, e o motivo de "multipass" descrever o mecanismo em vez de decorá-lo.
+
+## O bug que a inspeção visual pegou
+
+Este ano voltei ao repo, rodei contra o meu uso de produção e renderizei uma leva de PDFs de exemplo — e *olhei* pra eles de verdade. Um container sem `backgroundColor` pintava um **retângulo branco** por cima do que estivesse atrás: a factory de elementos usava `#FFFFFF` como default em vez de transparente. Tudo compilava; todo exit code era zero; o output estava errado. Corrigi e travei com testes de regressão — parte dos 14 testes que adicionei a um repo que, vergonhosamente, não tinha nenhum.
+
+Status, com honestidade: `0.1.x`, cedo mas funcionando. Os `examples/` geram PDFs reais e bonitos e são a referência atualizada; os demos antigos ficaram pra trás da API atual e o README diz qual é qual. O pardal também é o capítulo do meio de um arco maior — a mesma linhagem Clay continua em Rust no [cobogo](/blog/cobogo).
+
+[GitHub](https://github.com/JoaoHenriqueBarbosa/pardal) · [npm](https://www.npmjs.com/package/pardal)

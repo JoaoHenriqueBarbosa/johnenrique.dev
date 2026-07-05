@@ -1,0 +1,23 @@
+---
+title: "rust-agent-sdk: porting Anthropic's agent SDK to Rust, sessions first"
+description: "793 tests, a pluggable SessionStore with in-memory, Postgres and Redis backends behind one conformance suite — and the discipline of porting a contract 1:1."
+date: 2026-07-05
+author: John Enrique
+keywords: [rust, claude, agent, sdk, postgres, redis, tokio]
+---
+
+rust-agent-sdk is an unofficial Rust port of Anthropic's [claude-agent-sdk](https://github.com/anthropics/claude-agent-sdk-python) (Python). It does not talk to the Anthropic HTTP API — like the original, it spawns the `claude` CLI as a child process and speaks its `stream-json` control protocol over stdin/stdout, parsing the streamed events into typed Rust values on a `tokio`-native async surface.
+
+The wire format becomes a `Message` enum with ten variants built from typed `ContentBlock`s; the options struct mirrors the Python SDK's roughly fifty fields — model, tools, permission modes, MCP servers, hooks, budgets, a `can_use_tool` callback. Two entry points, same as upstream: one-shot `query()`, or a persistent bidirectional `ClaudeSDKClient` you can interrupt, reconfigure and drive mid-session.
+
+## Sessions as a first-class concern
+
+The part I care most about is session management, because it's the part agent harnesses usually get wrong: list, fork, rename, tag and delete sessions; resume or continue; import external JSONL transcripts; fold an incremental summary as messages arrive.
+
+Persistence goes through a `SessionStore` trait, and this is where the design earns its keep. Three implementations ship in the crate: **in-memory, Postgres (sqlx) and Redis** — the SQL one using `unnest` with `ORDINALITY` to keep message order stable, the Redis one indexing sessions in a ZSET. All three pass **the same conformance suite**, and the Postgres and Redis stores are additionally validated live against real Postgres 16 and Redis 7 in Docker. Both are feature-gated (`postgres`, `redis-store`), so nobody pays for a dependency they don't use. One contract, N implementations, one shared proof of correctness — that's the pattern.
+
+## Honest edges
+
+**793 tests** total; about 56 of them require the `claude` binary on PATH, so ~737 pass without it — the README says exactly that. S3 is not implemented; it's on the roadmap, labeled as such. This is a port, not an original design, and I state that in the first line: the value is in porting a nontrivial contract faithfully — subpath sentinels, delete cascades, millisecond mtimes — and proving the port with tests rather than promises.
+
+[GitHub](https://github.com/JoaoHenriqueBarbosa/rust-agent-sdk)

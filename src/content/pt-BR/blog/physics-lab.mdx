@@ -1,0 +1,21 @@
+---
+title: "physics-lab: ray tracing de um buraco negro dentro de um fragment shader"
+description: "Nove simulações de física moderna em GPU — geodésicas de Schwarzschild integradas por pixel, Schrödinger via split-step Fourier, um teste de Bell CHSH."
+date: 2026-07-05
+author: John Enrique
+keywords: [python, física, gpu, glsl, opengl, simulação]
+---
+
+O physics-lab são nove simulações autocontidas de mecânica quântica, relatividade especial e relatividade geral — cada uma um script Python standalone renderizando em tempo real via OpenGL/ModernGL, ou despejando frames direto num pipe de ffmpeg pra virar MP4.
+
+A peça central é o buraco negro. Geodésicas de fótons em torno de uma massa de Schwarzschild são integradas **por pixel, dentro do fragment shader**: RK4 avançando `d²u/dφ² + u = 3Mu²` por 800 passos por raio, em GLSL, na GPU. O render inclui o horizonte de eventos, a esfera de fótons, a ISCO, e um disco de acreção com perfil de emissão de Novikov–Thorne, redshift gravitacional e beaming Doppler relativístico. O lente gravitacional não é pintado por cima — ele emerge das geodésicas, porque a luz da imagem realmente curva.
+
+No resto do laboratório: funções de onda evoluídas pelo **método split-step Fourier** (tunelamento quântico, pacotes de onda contra barreiras), um **teste de Bell CHSH** cujas correlações violam o limite clássico do jeito que o universo viola, e relatividade especial movendo relógios procedurais e geometria em contração via boosts de Lorentz — que, como meus cadernos de álgebra linear gostam de lembrar, são só transformações lineares do espaço-tempo.
+
+## Escopo honesto
+
+O README diz com todas as letras: é um **projeto educacional pessoal**, não uma biblioteca empacotada nem ferramenta revisada por pares. Prefere código legível e visual marcante a rigor exaustivo, e cada simulação documenta exatamente o que aproxima — onde as unidades são naturais, onde um perfil é simplificado, onde um efeito é omitido. Não tem testes; tem ~3.700 linhas de Python e GLSL, e um tanto de física que eu agora entendo no nível do integrador em vez do nível do documentário.
+
+É o repo de hobby que eu mais gostaria de percorrer numa entrevista — não porque seja pilar, mas porque derivar as equações e então vê-las renderizar é o mesmo músculo de tudo que eu construo: entender o mecanismo, implementar o mecanismo, olhar o output.
+
+[GitHub](https://github.com/JoaoHenriqueBarbosa/physics-lab)

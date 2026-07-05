@@ -1,0 +1,25 @@
+---
+title: "ccr: construindo um agente de código Claude do zero em Rust"
+description: "Cliente SSE escrito à mão, sete tools tipadas, um renderer de markdown de 900 linhas e um pipeline de render em typestate que o compilador impõe — 171 testes, 8,2k linhas."
+date: 2026-07-05
+author: John Enrique
+keywords: [rust, ia, agente, tui, ratatui, anthropic, sse]
+---
+
+O ccr é um assistente de código IA nativo do terminal, movido a Claude — e não é wrapper de nada. O cliente de API, o parser de SSE, a suíte de tools, o pipeline de render e o motor de markdown estão todos implementados neste repo, em Rust: **8.221 linhas, 171 testes** (sete deles property-based via proptest).
+
+O loop agêntico é o de verdade: streama o turno do assistente, extrai as tool calls, executa contra a working tree, devolve os resultados e repete até não sobrar nada pra fazer. Sete tools embutidas — Bash, Read, Write, Edit, Glob, Grep, WebFetch — despachadas por **variantes tipadas, não string matching**. Input de tool que não parseia no tipo não roda.
+
+## Os detalhes que levaram o tempo
+
+O cliente SSE é escrito à mão, com segurança UTF-8 a nível de byte: um codepoint multi-byte partido entre chunks TCP nunca corrompe o stream. Backoff exponencial em 429/529/5xx. O interleaved thinking aparece ao vivo na UI enquanto o modelo raciocina entre tool calls.
+
+A TUI é ratatui com um **renderer de markdown que eu mesmo escrevi** (~900 linhas): highlighting via syntect, tabelas com box-drawing que quebram linha e encolhem colunas pra largura do terminal, task lists, blockquotes aninhados. O render passa por um pipeline em typestate — `PreparedBlocks → measure → clip → render` — onde pular uma fase é erro de compilação, não surpresa de runtime.
+
+O codebase inteiro roda sob uma disciplina deliberadamente fanática, documentada no repo: nenhum tipo primitivo em campo de domínio (tudo é newtype), guardas de path traversal nas tools de arquivo, clippy pedantic em `deny`, duas threads só — uma de UI que nunca bloqueia e uma task tokio de fundo que faz o trabalho.
+
+## Escopo honesto
+
+Não há sandbox Docker aqui — as tools rodam no host, protegidas pelos guards e blocklists; se você quer um agente totalmente sandboxed, é outro design (meu [agent-42](/blog/agent-42) sandboxa o bash em Docker, por exemplo). O ccr é o que diz ser: uma reimplementação do zero do loop agêntico, construída pra entender cada camada sendo dono de cada camada.
+
+[GitHub](https://github.com/JoaoHenriqueBarbosa/ccr)

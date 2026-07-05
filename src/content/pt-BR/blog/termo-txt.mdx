@@ -1,0 +1,25 @@
+---
+title: "termo.txt: meu site pessoal como um terminal, over-engineered de propósito"
+description: "Um emulador xterm.js servindo um Wordle PT-BR, event sourcing na mão em JSONL append-only, e auth de sessão — tudo por um site que ninguém pediu."
+date: 2026-07-05
+author: John Enrique
+keywords: [nextjs, xterm, wordle, event-sourcing, typescript]
+---
+
+O termo.txt é um site pessoal que boota num terminal. Não um pastiche de CSS — um emulador de verdade (xterm.js) com 200+ temas de cor, rodando contra um backend Next.js App Router. Dentro dele vive, entre outros comandos, um Wordle PT-BR ("Termo") totalmente correto.
+
+O enquadramento honesto primeiro: este projeto é **over-engineering como hobby, e sabe disso**. Nada aqui precisava de event sourcing. Construí mesmo assim, porque construir o mecanismo com as próprias mãos é como se descobre do que o padrão é feito.
+
+## As partes que eu over-construí, com carinho
+
+**Event sourcing na mão.** Mudanças de estado são anexadas a arquivos JSONL — um log de eventos append-only com estado reconstruído por replay. Sem framework, sem biblioteca: só a disciplina de "o log é a verdade e todo o resto é projeção", implementada pequena o bastante pra caber na cabeça.
+
+**Auth de verdade.** Autenticação por sessão com bcrypt e cookies devidamente endurecidos. Pra um brinquedo de terminal. Porque se vai ter conta, vai ter conta feita direito.
+
+**Um Wordle correto.** Todo mundo que já implementou Wordle conhece a armadilha: letras repetidas. Chute "ARARA" contra uma palavra com um A só e o matching ingênuo por letra mente pro jogador. O algoritmo correto exige **duas passadas com contagem** — verdes primeiro, consumindo o budget de cada letra, depois amarelos contra o que sobrou. Algoritmo pequeno, surpreendentemente fácil de errar, satisfatório de acertar.
+
+## Por que existe
+
+Todo engenheiro deveria ter um projeto sem stakeholder, sem roadmap e sem motivo — onde o único requisito é que as entranhas te deem prazer. Este é o meu. E de quebra demonstra coisas que importam no trabalho sério: log append-only é como eu penso trilha de auditoria e fila, e o bug de contagem dupla do Wordle é uma miniatura de todo defeito "funciona na demo, erra nas bordas" que já cacei em produção.
+
+[GitHub](https://github.com/JoaoHenriqueBarbosa/termo.txt)

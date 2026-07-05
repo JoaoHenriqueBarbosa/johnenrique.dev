@@ -1,0 +1,23 @@
+---
+title: "rust-agent-sdk: portando o SDK de agentes da Anthropic pra Rust, com sessões em primeiro lugar"
+description: "793 testes, um SessionStore plugável com backends in-memory, Postgres e Redis sob uma única suíte de conformidade — e a disciplina de portar um contrato 1:1."
+date: 2026-07-05
+author: John Enrique
+keywords: [rust, claude, agente, sdk, postgres, redis, tokio]
+---
+
+O rust-agent-sdk é um porte não-oficial em Rust do [claude-agent-sdk](https://github.com/anthropics/claude-agent-sdk-python) (Python) da Anthropic. Ele não fala com a API HTTP da Anthropic — como o original, sobe a CLI `claude` como processo filho e fala o protocolo de controle `stream-json` por stdin/stdout, parseando os eventos streamados em valores Rust tipados numa superfície async nativa de `tokio`.
+
+O formato de wire vira um enum `Message` com dez variantes construídas de `ContentBlock`s tipados; o struct de opções espelha os cerca de cinquenta campos do SDK Python — modelo, tools, modos de permissão, servidores MCP, hooks, budgets, um callback `can_use_tool`. Dois pontos de entrada, como upstream: `query()` one-shot, ou um `ClaudeSDKClient` bidirecional persistente que você interrompe, reconfigura e dirige no meio da sessão.
+
+## Sessões como cidadão de primeira classe
+
+A parte de que mais gosto é a gestão de sessão, porque é a parte que os harnesses de agente costumam errar: listar, forkar, renomear, taguear e deletar sessões; resume e continue; importar transcripts JSONL externos; dobrar um sumário incremental conforme as mensagens chegam.
+
+A persistência passa por um trait `SessionStore`, e é aí que o design se paga. Três implementações vêm na crate: **in-memory, Postgres (sqlx) e Redis** — a SQL usando `unnest` com `ORDINALITY` pra manter a ordem das mensagens estável, a Redis indexando sessões num ZSET. As três passam **a mesma suíte de conformidade**, e os stores de Postgres e Redis são adicionalmente validados ao vivo contra Postgres 16 e Redis 7 reais em Docker. Ambos são feature-gated (`postgres`, `redis-store`) — ninguém paga por dependência que não usa. Um contrato, N implementações, uma prova de correção compartilhada — esse é o padrão.
+
+## Arestas honestas
+
+**793 testes** no total; uns 56 exigem o binário `claude` no PATH, então ~737 passam sem ele — o README diz exatamente isso. S3 não está implementado; está no roadmap, rotulado como tal. Isto é um porte, não um design original, e eu digo isso na primeira linha: o valor está em portar um contrato não-trivial com fidelidade — subpath sentinels, delete em cascata, mtime em milissegundos — e provar o porte com testes em vez de promessas.
+
+[GitHub](https://github.com/JoaoHenriqueBarbosa/rust-agent-sdk)

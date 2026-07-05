@@ -1,0 +1,21 @@
+---
+title: "physics-lab: ray tracing a black hole inside a fragment shader"
+description: "Nine GPU simulations of modern physics — Schwarzschild geodesics integrated per pixel, Schrödinger via split-step Fourier, a CHSH Bell test."
+date: 2026-07-05
+author: John Enrique
+keywords: [python, physics, gpu, glsl, opengl, simulation]
+---
+
+physics-lab is nine self-contained simulations of quantum mechanics, special relativity and general relativity — each one a standalone Python script rendering in real time through OpenGL/ModernGL, or piping frames straight into ffmpeg for MP4s.
+
+The showpiece is the black hole. Photon geodesics around a Schwarzschild mass are integrated **per pixel, inside the fragment shader**: RK4 stepping `d²u/dφ² + u = 3Mu²` for 800 steps per ray, in GLSL, on the GPU. The render includes the event horizon, the photon sphere, the ISCO, and an accretion disk with a Novikov–Thorne emission profile, gravitational redshift and relativistic Doppler beaming. Gravitational lensing isn't painted on — it falls out of the geodesics, because the light in the image genuinely bends.
+
+Elsewhere in the lab: wave functions evolved with the **split-step Fourier method** (quantum tunneling, wave packets against barriers), a **CHSH Bell test** whose correlations violate the classical bound the way the universe does, and special relativity driving procedural clocks and length-contracting geometry via Lorentz boosts — which, as my linear algebra notes like to remind me, are just linear transformations of spacetime.
+
+## Honest scope
+
+The README says it plainly: this is a **personal educational project**, not a packaged library or a peer-reviewed tool. It favors readable code and striking visuals over exhaustive rigor, and each simulation documents exactly what it approximates — where units are natural, where a profile is simplified, where an effect is omitted. There are no tests; there are ~3,700 lines of Python and GLSL, and a lot of physics I now understand at the level of the integrator rather than the level of the documentary.
+
+It's the hobby repo I'd most happily walk through in an interview — not because it's a pillar, but because deriving the equations and then watching them render is the same muscle as everything else I build: understand the mechanism, implement the mechanism, look at the output.
+
+[GitHub](https://github.com/JoaoHenriqueBarbosa/physics-lab)

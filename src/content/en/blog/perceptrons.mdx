@@ -1,0 +1,21 @@
+---
+title: "perceptrons: neural networks from scratch, one historical era at a time"
+description: "From Rosenblatt's 1957 perceptron to MLPs with human-in-the-loop feedback — backpropagation in pure numpy, with a React canvas to draw the inputs."
+date: 2026-07-05
+author: John Enrique
+keywords: [python, numpy, neural-networks, backpropagation, education, react]
+---
+
+perceptrons is my neural networks curriculum, self-imposed: reimplement the field's history from scratch, in order, understanding why each generation exists by hitting the wall that motivated the next one.
+
+It starts where the field started — **Rosenblatt's 1957 perceptron**: a binary threshold neuron with the original learning rule, plus binary output coding to stretch N neurons across 2^N classes. Then you hit the wall on schedule: a step function has no gradient, and linearly inseparable problems (the famous XOR) simply won't fall. The next phase answers with multi-layer perceptrons and **backpropagation written out in pure numpy** — forward pass, chain rule, weight updates, no autograd, no framework. If you can't implement the chain rule with array operations, you don't get to say you understand backprop; that was the bar I set for myself.
+
+## Draw it, watch it learn
+
+The part that makes it more than an exercise: a React frontend with a 16×16 canvas where you **draw the input patterns** and watch the network classify them live. The human-in-the-loop phase goes further — correct the network's mistakes and it learns from your feedback in real time. Training stops being an abstract loss curve and becomes something you can poke with a finger. Under the hood it's all matrix multiplication and elementwise nonlinearities — the same linear algebra I keep working through on paper, here with a face on it.
+
+## Where it sits
+
+This is educational by design and labeled as such — it's the footnote of my portfolio, not a pillar, and I don't pitch myself as an ML engineer on the strength of it. What it demonstrates is the habit that runs through everything else I build (layout engines, reactivity systems, agent loops): **when I want to understand a mechanism, I implement the mechanism**. The full-stack packaging — Python core, React face — is just how I make the understanding visible.
+
+[GitHub](https://github.com/JoaoHenriqueBarbosa/perceptrons)

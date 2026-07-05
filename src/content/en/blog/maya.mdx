@@ -1,0 +1,21 @@
+---
+title: "maya: I built SolidJS-style reactivity in Go — to prove it shouldn't be built"
+description: "A complete fine-grained reactive framework compiled to WASM, 149 tests, benchmarks — and the measured conclusion that killed it. The conclusion is the deliverable."
+date: 2026-07-05
+author: John Enrique
+keywords: [go, wasm, reactivity, signals, solidjs, experiment]
+---
+
+maya asked one concrete question: *can you build SolidJS-style fine-grained reactivity in idiomatic Go, in the browser via WebAssembly, using nothing but the standard library?* Instead of arguing about it, I built the whole thing and measured it.
+
+And "the whole thing" means the whole thing: a generic `Signal[T]` with versioning, automatic dependency tracking (effects record which signals they read and re-run only when those change), `Memo`/`Computed` with caching, observer batching, a proper dependency graph. A declarative widget layer on top — Container, Column, Row, Text, Button. Two renderers, DOM and Canvas. Everything compiles to a single `.wasm` with the standard Go compiler, **zero third-party dependencies**, leaning on the modern stdlib (`iter`, `weak`, `runtime.AddCleanup`, `//go:wasmexport`). **149 tests, ~12.4k lines of Go**, with benchmark suites checked into the repo.
+
+## The answer was no
+
+The benchmarks say what they say: Go's garbage collector and goroutine scheduler impose overhead that a fine-grained, allocation-light invalidation model *fights* rather than uses. The entire point of signals is precise, cheap invalidation — and the runtime taxes exactly that. So I stopped. Deliberately, with the data in the repo, and the README rewritten to frame it as what it is: **a completed experiment with a conclusion**.
+
+This is the project I bring up when someone asks "tell me about something that didn't work". Junior engineers push harder on a losing approach; the useful skill is recognizing when the substrate is wrong and closing the question with evidence. I learned, by building it, why Solid is JavaScript — and why serious reactive frameworks avoid heavy-GC languages in the hot path. That answer was the objective, and it was reached.
+
+The framework still runs, the code is instructive to read, and the suite is green — I fixed the two bugs that had crept into the tests when I revisited the repo this year. But treat it as a reference experiment, not a dependency. It says so on the label.
+
+[GitHub](https://github.com/JoaoHenriqueBarbosa/maya)

@@ -1,0 +1,23 @@
+---
+title: "week-schedule: drag and drop sem biblioteca"
+description: "Uma grade de agendamento semanal — slots de 30 minutos, detecção de colisão, preview de arraste — construída sobre pointer events crus pra entender o que as libs de dnd fazem de verdade."
+date: 2026-07-05
+author: John Enrique
+keywords: [react, typescript, drag-and-drop, zustand, vite]
+---
+
+O week-schedule é um app de agendamento semanal: uma grade de slots de 30 minutos pelos dias da semana, uma sidebar de templates de curso com durações configuráveis, e drag and drop pra colocar, mover e remover eventos. React 19, TypeScript, Tailwind 4, Zustand pro estado, Vite (Rolldown) no build.
+
+A restrição deliberada: **nenhuma biblioteca de drag and drop**. Sem dnd-kit, sem react-dnd. Pointer events crus, hit-testing meu, minha própria máquina de estados.
+
+## O que as bibliotecas escondiam
+
+Fazer dnd na mão é um curso comprimido nos problemas que as libs existem pra resolver. Mapeamento de coordenadas — traduzir a posição do ponteiro em "coluna do dia, linha do horário" enquanto a página rola embaixo de você. Ghost rendering — o **preview ao vivo** que segue o arraste e gruda nos slots válidos, pro usuário ver exatamente onde o evento vai cair antes de soltar. E o que tem conteúdo algorítmico de verdade, a **detecção de colisão**: um evento ocupa um intervalo numa coluna de dia, intervalos não podem se sobrepor, e a validade precisa ser recomputada continuamente *durante* o arraste — incluindo o caso de auto-sobreposição quando você move um evento dentro do próprio dia. Checar sobreposição de intervalos é trivial isolado; mantê-la correta, rápida e visualmente honesta a 60fps enquanto o usuário balança o ponteiro é onde mora a engenharia.
+
+O Zustand guarda a grade como fonte única de verdade, então a camada de arraste é função pura do estado — e é isso que torna o preview confiável: o ghost e o commit passam pela mesma validação.
+
+## Por que está aqui
+
+É um repo pequeno com uma ideia, executada por inteiro. O padrão se repete nos meus projetos — o [pardal](/blog/pardal) faz layout engine na mão, o [ccr](/blog/ccr) faz parser SSE na mão, este faz dnd na mão: pegue um mecanismo que todo mundo consome por biblioteca, construa uma vez a partir dos primitivos, e depois disso a biblioteca vira conveniência em vez de mistério. E mais: no trabalho eu entreguei um page builder de produção cujo drag-and-drop é meu de ponta a ponta — este é a miniatura pública e legível dessa competência.
+
+[GitHub](https://github.com/JoaoHenriqueBarbosa/week-schedule)

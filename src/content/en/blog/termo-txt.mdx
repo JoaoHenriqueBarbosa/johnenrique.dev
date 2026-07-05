@@ -1,0 +1,25 @@
+---
+title: "termo.txt: my personal site as a terminal, over-engineered on purpose"
+description: "An xterm.js terminal emulator serving a PT-BR Wordle, hand-rolled event sourcing in append-only JSONL, and session auth — all for a site nobody asked me to build."
+date: 2026-07-05
+author: John Enrique
+keywords: [nextjs, xterm, wordle, event-sourcing, typescript]
+---
+
+termo.txt is a personal site that boots into a terminal. Not a CSS pastiche of one — a real emulator (xterm.js) with 200+ color themes, running against a Next.js App Router backend. Inside it lives, among other commands, a fully correct PT-BR Wordle ("Termo").
+
+The honest framing first: this project is **over-engineering as a hobby, and it knows it**. Nothing here needed event sourcing. I built it anyway, because building the mechanism yourself is how you find out what the pattern is actually made of.
+
+## The parts I over-built, lovingly
+
+**Event sourcing by hand.** State changes are appended to JSONL files — an append-only event log with state rebuilt by replay. No framework, no library: just the discipline of "the log is the truth and everything else is a projection", implemented small enough to hold in your head.
+
+**Real auth.** Session-based authentication with bcrypt password hashing and properly hardened cookies. For a terminal toy. Because if it's going to have accounts, it's going to have accounts done right.
+
+**A correct Wordle.** Everyone who has implemented Wordle knows the trap: repeated letters. Guess "ARARA" against a word with one A and naive per-letter matching lies to the player. The correct algorithm needs **two passes with count tracking** — greens first, consuming letter budgets, then yellows against what remains. Small algorithm, surprisingly easy to get wrong, satisfying to get right.
+
+## Why it exists
+
+Every engineer should have one project with no stakeholders, no roadmap and no reason — where the only requirement is that the internals delight you. This is mine. It also quietly demonstrates things that matter in serious work: append-only logs are how I think about audit trails and queues, and the Wordle double-counting bug is a miniature of every "works in the demo, wrong at the edges" defect I've ever hunted in production.
+
+[GitHub](https://github.com/JoaoHenriqueBarbosa/termo.txt)

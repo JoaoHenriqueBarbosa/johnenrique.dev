@@ -1,0 +1,21 @@
+---
+title: "agent-42: um agente de código num while loop"
+description: "O momento em que entendi agentes: a inteligência está no modelo, não no framework. ~70 linhas de lógica, deliberadamente expostas."
+date: 2026-07-05
+author: John Enrique
+keywords: [python, ia, agente, llm, tool-use, minimal]
+---
+
+O agent-42 registra uma sacada: **um agente de código é um `while` loop**. Streame o modelo, execute a tool que ele pediu, anexe o resultado, dê a volta de novo. Quando não houver mais tool calls, mostre o texto e espere input. Esse é o mecanismo inteiro — todo o resto que os frameworks empilham em cima (chains, planners, módulos de memória, orquestradores) é embalagem em volta desse loop, e a embalagem costuma enterrá-lo.
+
+Então o agent-42 faz o oposto de um framework: **expõe o loop**. A lógica central tem cerca de 70 linhas de Python — pequena o bastante pra ler de uma sentada. Das ~1.000 linhas do repo, mais da metade é a TUI em Textual; o mesmo `run_turn` também dirige um fallback de CLI puro, desacoplado da interface por um dict de callbacks. O loop não sabe quem o renderiza.
+
+## O que ele demonstra
+
+Interleaved thinking — o modelo raciocina, age, observa o resultado, raciocina de novo — emerge do loop sem orquestração nenhuma. É agnóstico de provider. Escreve código, roda, lê o erro, corrige e itera, autonomamente. A tese do README é a tese com que eu opero construindo sistemas de agente profissionalmente: **a inteligência está no modelo, não no código**. Seu trabalho é dar alavancas limpas e sair da frente.
+
+## Escopo honesto
+
+O agent-42 é um spike exploratório e está rotulado como tal. A sandbox Docker cobre só a tool `bash` — leituras e escritas de arquivo rodam no host, guardadas por checagens de path; o README diz isso em vez de acenar um "totalmente sandboxed". Não tem testes e as dependências não estão pinadas. É um artefato de ensino: leia, aprenda, forke. Pra versão industrial das mesmas convicções, veja o [ccr](/blog/ccr) — o mesmo loop, em Rust, com 171 testes e um sistema de tipos de guarda.
+
+[GitHub](https://github.com/JoaoHenriqueBarbosa/agent-42)

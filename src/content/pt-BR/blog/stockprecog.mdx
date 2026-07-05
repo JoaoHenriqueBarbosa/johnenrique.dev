@@ -1,0 +1,23 @@
+---
+title: "stockprecog: um estudo quant desenhado pra não me enganar"
+description: "Predição cross-sectional em ações da B3 com régua de avaliação López de Prado — onde o achado honesto e parcialmente negativo é a contribuição. Publicado com DOI."
+date: 2026-07-05
+author: John Enrique
+keywords: [python, quant, machine-learning, finanças, pesquisa, zenodo]
+---
+
+O stockprecog prediz P(trade dá certo) cross-sectionalmente em ações brasileiras (B3) — e é deliberadamente um estudo de **invalidação honesta**. O achado principal é modesto e parcialmente negativo, e esse é o ponto. A contribuição não é um alpha mágico; é a régua de avaliação anti-autoengano, construída sobre a metodologia de López de Prado / *Advances in Financial Machine Learning*: dados point-in-time, features auditadas por causalidade (zero look-ahead), Sharpe deflacionado, e cada trial logado num JSON em vez de escolhido a dedo.
+
+## O que a régua disse
+
+Sinais derivados de preço — momentum, volatilidade, diferenciação fracionária, microestrutura de Amihud, detecção de regime CUSUM/SADF — são **estatisticamente reais mas economicamente sub-marginais**: Sharpe deflacionado bruto de uns 0,41 desaba pra cerca de −1,1 líquido de custos com rebalanceamento a 10 dias. O resultado é robusto do jeito que importa: decis não salvam, horizontes maiores não salvam, e até um piso de custo só-spread fica perto de zero pra large caps. Se um pipeline com esse cuidado diz que um sinal é sub-econômico, o veredito *é* o resultado.
+
+O README abre com a frase que um recrutador deveria ler duas vezes: **isto não é um sistema de trading e nunca alega ser**. É um exemplo trabalhado de como avaliar uma estratégia sem se enganar — 26 testes mantêm o pipeline honesto sobre a própria mecânica.
+
+## Por que publicar um resultado negativo
+
+Porque resultado negativo com metodologia rigorosa é mais raro e mais útil que backtest otimista, e porque publicar força a disciplina. O estudo está arquivado no Zenodo com DOI citável ([10.5281/zenodo.20706701](https://doi.org/10.5281/zenodo.20706701)) e o tooling do dataset é reproduzível de ponta a ponta.
+
+Posicionamento às claras: não sou quant e não me apresento como um — isto vive no meu portfólio como evidência de *método*: como eu meço, como resisto à vontade de acreditar nos próprios resultados, e como o mesmo reflexo de "testar, não inferir" da engenharia se comporta apontado pra finanças.
+
+[GitHub](https://github.com/JoaoHenriqueBarbosa/stockprecog) · [DOI](https://doi.org/10.5281/zenodo.20706701)

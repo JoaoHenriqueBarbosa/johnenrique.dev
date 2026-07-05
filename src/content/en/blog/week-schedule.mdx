@@ -1,0 +1,23 @@
+---
+title: "week-schedule: drag and drop with no library"
+description: "A weekly scheduling grid — 30-minute slots, collision detection, drag previews — built on raw pointer events to understand what dnd libraries actually do."
+date: 2026-07-05
+author: John Enrique
+keywords: [react, typescript, drag-and-drop, zustand, vite]
+---
+
+week-schedule is a weekly scheduling app: a grid of 30-minute slots across the days of the week, a sidebar of course templates with configurable durations, and drag and drop to place, move and remove events. React 19, TypeScript, Tailwind 4, Zustand for state, Vite (Rolldown) for the build.
+
+The deliberate constraint: **no drag-and-drop library**. No dnd-kit, no react-dnd. Raw pointer events, my own hit-testing, my own state machine.
+
+## What the libraries were hiding
+
+Building dnd by hand is a compressed course in the problems the libraries exist to solve. Coordinate mapping — translating a pointer position into "day column, time row" while the page scrolls under you. Ghost rendering — the **live preview** that follows the drag and snaps to valid slots, so the user sees exactly where the event will land before releasing. And the one with actual algorithmic content, **collision detection**: an event occupies an interval in a day column, intervals must not overlap, and validity has to be recomputed continuously *during* the drag — including the self-overlap case when you move an event within its own day. Interval overlap checks are trivial in isolation; keeping them correct, fast and visually honest at 60fps while the user waves a pointer around is where the engineering lives.
+
+Zustand holds the grid as the single source of truth, so the drag layer is a pure function of state — which is what makes the preview trustworthy: the ghost and the commit run through the same validation.
+
+## Why it's here
+
+It's a small repo with one idea, fully executed. The pattern repeats across my projects — [pardal](/blog/pardal) hand-rolls a layout engine, [ccr](/blog/ccr) hand-rolls an SSE parser, this one hand-rolls dnd: pick a mechanism everyone consumes through a library, build it once from primitives, and afterwards the library is a convenience instead of a mystery. Also: at work I've shipped a production page builder whose drag-and-drop I own end to end — this is the public, readable miniature of that competence.
+
+[GitHub](https://github.com/JoaoHenriqueBarbosa/week-schedule)

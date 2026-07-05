@@ -1,0 +1,23 @@
+---
+title: "cobogo: the Clay layout algorithm, made Rust-idiomatic"
+description: "Zero-dependency core, structure-of-arrays internals, a closure-based API — the third chapter of reimplementing the same layout engine across languages."
+date: 2026-07-05
+author: John Enrique
+keywords: [rust, layout-engine, clay, crates, tui]
+---
+
+cobogo is a renderer-agnostic UI layout engine for Rust — an idiomatic port of Nic Barker's [Clay](https://github.com/nicbarker/clay). It computes the position and size of every element from a declarative, immediate-mode description and emits a flat list of render commands. It draws nothing itself: the core crate has **zero dependencies** and no drawing code. You describe the layout once; the backend — the bundled terminal renderer, or one you write — is someone else's problem by design.
+
+The name is the thesis: a *cobogó* is the perforated modernist brick that structures light and space in Brazilian architecture. A fitting name for a library whose only job is structuring space.
+
+## Porting without translating
+
+A faithful port is not a transliteration. Clay's multi-pass algorithm survives intact — sizing along X, text wrapping, aspect-ratio fitting, height propagation, sizing along Y, z-index sorting, command generation, each a distinct pass over the element tree. But the shape of the code is Rust's: elements live in parallel `Vec`s (structure-of-arrays) instead of a pointer tree, command generation walks with an explicit stack instead of recursion, and Clay's manual begin/end bookkeeping becomes a closure — `with_element(id, decl, |ctx| { … })` closes the element automatically when the closure ends. Same algorithm, native idiom. There's a text measurement cache, arena-style storage, and input handling in the crate; the license is zlib/libpng, inherited from Clay.
+
+## The arc this belongs to
+
+cobogo is the third time I've built on this algorithm: I studied it in C in the original, reimplemented it in TypeScript targeting PDFs ([pardal](/blog/pardal) — which runs in production), and then rebuilt it in Rust targeting terminals. Same domain, three languages, three render targets. Layout engines stopped being a black box for me somewhere in chapter two — and that's the actual return on this kind of project.
+
+It's on crates.io. The core is small and honest about being early: a handful of smoke tests, an algorithm faithfully ported, and room to grow.
+
+[GitHub](https://github.com/JoaoHenriqueBarbosa/cobogo) · [crates.io](https://crates.io/crates/cobogo)

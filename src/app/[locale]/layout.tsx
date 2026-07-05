@@ -4,14 +4,25 @@ import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { Analytics } from "@vercel/analytics/next";
-import { Inter } from "next/font/google";
+import { Schibsted_Grotesk, JetBrains_Mono } from "next/font/google";
 import { cn } from "@/lib/utils";
 import { routing } from "@/i18n/routing";
+import type { Viewport } from "next";
 
-const fontSans = Inter({
+const fontSans = Schibsted_Grotesk({
   subsets: ["latin"],
-  variable: "--font-inter",
+  variable: "--font-sans-base",
 });
+
+const fontMono = JetBrains_Mono({
+  subsets: ["latin"],
+  variable: "--font-mono-base",
+});
+
+export const viewport: Viewport = {
+  themeColor: "#0e0f13",
+  colorScheme: "dark",
+};
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
@@ -45,8 +56,9 @@ export default async function RootLayout({
     <html lang={locale}>
       <body
         className={cn(
-          "min-h-screen font-sans antialiased bg-muted",
-          fontSans.variable
+          "min-h-screen font-sans antialiased",
+          fontSans.variable,
+          fontMono.variable
         )}
       >
         <NextIntlClientProvider>{children}</NextIntlClientProvider>

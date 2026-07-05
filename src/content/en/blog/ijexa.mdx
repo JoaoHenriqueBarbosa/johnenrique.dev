@@ -1,0 +1,21 @@
+---
+title: "ijexa: synthesizing a Candomblé rhythm in pure Python"
+description: "The Ijexá groove as code — five instruments, a 149ms master slot, flam strokes on the lead drum, and a master drum that phrases instead of looping."
+date: 2026-07-05
+author: John Enrique
+keywords: [python, dsp, audio, music, candomble, rhythm]
+---
+
+Ijexá is one of the foundational rhythms of Candomblé, the Afro-Brazilian religion — the groove you hear behind Gilberto Gil and countless blocos afro. ijexa renders it in pure Python with real percussion samples: agogô, caxixi, lê, rumpi and rum, each instrument an independent module you can play solo or drop into the full mix.
+
+The engineering is in taking the rhythm seriously as a *system*. Everything shares a **149ms slot grid**; the agogô's 16-slot pattern (`A A . G . G G . A . A . G . G .`) is the master cycle at 2,384ms, and the 8-slot instruments run twice per cycle. Patterns are written as readable strings — the notation is the data structure.
+
+## The rum doesn't loop
+
+The detail I'm proudest of: the rum, the master drum, doesn't repeat a pattern. In actual Candomblé practice the rum *leads* — it converses with the dancers and the other drums. So the module gives it a **vocabulary of phrases** (base, dobra, chamada, corrido, resposta, virada), each with a role, sequenced so the performance develops over time instead of looping. And every rum stroke carries a **flam** — the two hands landing 37ms apart — because that grace note is half of what makes a rum sound like a rum and not like a drum machine.
+
+There's real DSP underneath — sample playback and mixing, algorithmic reverb, Butterworth filtering, with CuPy available to push the heavier processing to the GPU — but the point was never the effects chain. The point was transcription as understanding: you only find out how much structure lives in a rhythm you've heard your whole life when you try to write it down as code, and the code refuses to swing until you've noticed the flam, the phrase logic, the way the cycle breathes.
+
+Culture and DSP in one small repo — rapport material, honestly labeled as such, and one of my favorite things I've built.
+
+[GitHub](https://github.com/JoaoHenriqueBarbosa/ijexa)

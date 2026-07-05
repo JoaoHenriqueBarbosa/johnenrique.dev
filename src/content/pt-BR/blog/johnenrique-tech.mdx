@@ -1,0 +1,23 @@
+---
+title: "johnenrique.tech: reconstruindo este site em público"
+description: "De um portfólio com cara de 2019 e imagens de 3MB no hero pra um site Next 16 totalmente estático com dois componentes client — o rework que você está lendo agora."
+date: 2026-07-05
+author: John Enrique
+keywords: [nextjs, react, tailwind, performance, i18n, meta]
+---
+
+Este site é um repo como os outros, então ganha um post como os outros.
+
+A versão anterior era uma cápsula do tempo de 2019: heros com stock-art holográfica pesando 3,2MB, glassmorphism, animação de cursor digitando, carousel de skills e copy sobre ser um "desenvolvedor apaixonado". Pior que a cara datada, era um **cache velho de mim** — ainda vendia a stack com que trabalhei anos atrás, enquanto meu trabalho público real (um toolchain fiscal em Rust, SDKs de agente, PRs mergeados em framework) estava invisível.
+
+## O que a reconstrução é
+
+Next.js 16 com App Router, React 19, Tailwind 4 — e uma arquitetura deliberada: **toda página é estática**, e a homepage embarca exatamente dois componentes client pequenos (o seletor de idioma e um botão de copiar email). Todo o resto é server component com zero JavaScript de cliente. Os 3,2MB de imagens de hero viraram zero: o largest contentful paint agora é um título numa fonte precarregada.
+
+O roteamento bilíngue funciona sem middleware. O inglês é servido sem prefixo na raiz e o português sob `/pt-BR`, implementado com rewrites na camada de roteamento — uma requisição pra `/` é reescrita internamente pra árvore localizada, e URLs `/en/*` canonicalizam com 308. Nenhum código roda em runtime pra decidir locale.
+
+O sistema de conteúdo segue uma regra, emprestada de como eu mantenho meus repos: **todo número do site linka pra fonte pública, e toda alegação foi verificada contra ela antes de publicar** — estrelas pela API do GitHub, versões de pacote pelos registries, contagem de PRs mergeados pela própria URL de busca que você pode clicar. O site descreve o trabalho por menos, não por mais, porque o jeito mais rápido de perder um leitor técnico é uma alegação inflada.
+
+O código é público, como tudo que ele descreve.
+
+[GitHub](https://github.com/JoaoHenriqueBarbosa/johnenrique.tech)

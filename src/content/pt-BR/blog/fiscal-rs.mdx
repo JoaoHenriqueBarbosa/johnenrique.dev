@@ -1,0 +1,27 @@
+---
+title: "fiscal-rs: portando a biblioteca fiscal mais usada do Brasil pra Rust — e virando mantenedor dela"
+description: "1.834 testes, 11 PRs da comunidade mergeados numa rodada, releases no crates.io e npm com provenance assinada — e um pacote quebrado que ensinou por que se testa em vez de inferir."
+date: 2026-07-05
+author: John Enrique
+keywords: [rust, nfe, fiscal, crates, npm, oidc, slsa, open-source]
+---
+
+Documento fiscal eletrônico (NF-e) é um domínio hostil: XML assinado com certificado ICP-Brasil, SOAP sobre mTLS contra as SEFAZ estaduais, modos de contingência e regras tributárias com quinze variantes de ICMS. A implementação de referência é o [sped-nfe](https://github.com/nfephp-org/sped-nfe), biblioteca PHP com 2.400+ estrelas. O fiscal-rs é o meu port dela pra Rust — não um wrapper, uma reimplementação com tipos algébricos, builders em typestate e parse-don't-validate em toda fronteira.
+
+Os números são contados no código, não no marketing: **1.834 testes** em 67 arquivos, ~68k linhas de Rust, 94% de cobertura e benchmarks reproduzíveis (montar uma nota leva ~27µs — cerca de 16× o baseline PHP). Enquanto portava, fui achando comportamentos do sped-nfe que não tinham teste, então contribuí os testes de volta: [PR #1313](https://github.com/nfephp-org/sped-nfe/pull/1313), 370 testes, cobertura upstream de 40% pra 86,5%. Mergeado.
+
+## Aí as pessoas apareceram
+
+A parte que eu não planejei: contribuidores acharam o projeto. Dezesseis PRs caíram na minha fila — doze da comunidade, cobrindo MDF-e, CT-e, NFS-e municipal, validação XSD e uma migração de criptografia. Revisei todos e **mergeei onze numa rodada**, coordenando os releases no crates.io.
+
+É na revisão que a régua se estabelece. Entre o que a revisão pegou: um bug de assinatura de evento que faria a SEFAZ rejeitar cancelamentos silenciosamente, um diretório temporário previsível em `/tmp` aberto a symlink attack, uma conversão de timezone que deslocava instantes em uma hora sem avisar, e um parser PKCS#12 feito à mão que dava panic em certificado A1 legado (3DES/RC2-40 — reproduzi os dois). Nada disso é glamouroso. Tudo isso é o trabalho.
+
+## O bug que validou o método
+
+Os bindings Node (`@fiscal-rs/node`, addon nativo N-API pra sete plataformas) estavam publicados havia três releases — e **todos quebrados**. O pipeline subia o binário `.node` compilado mas nunca o entrypoint JS que o carrega, então `require('@fiscal-rs/node')` falhava em qualquer plataforma. Ninguém percebeu, porque não havia consumidor real exercitando o pacote.
+
+Eu achei porque instalo e rodo em vez de assumir que compilou = funciona. A correção saiu no 0.7.3, validada de ponta a ponta: instalei do npm, rodei o exemplo do README, saiu uma NF-e com chave de acesso válida de 44 dígitos. No caminho, migrei a publicação pra **OIDC trusted publishing** — sem token npm de longa duração, e todo release agora carrega provenance SLSA assinada no transparency log do Sigstore.
+
+O fiscal-rs é o projeto de que mais me orgulho: prova o Rust, a profundidade de domínio, e a parte mais difícil de forjar — outras pessoas confiando no projeto a ponto de construir em cima.
+
+[GitHub](https://github.com/JoaoHenriqueBarbosa/fiscal-rs) · [crates.io](https://crates.io/crates/fiscal) · [npm](https://www.npmjs.com/package/@fiscal-rs/node) · [Docs](https://fiscal-rs-docs.vercel.app/)

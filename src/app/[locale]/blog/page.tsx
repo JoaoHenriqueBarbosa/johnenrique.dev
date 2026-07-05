@@ -3,7 +3,6 @@ import path from "path";
 import { Link } from "@/i18n/navigation";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { Locale } from "next-intl";
-import Image from "next/image";
 import { Header } from "@/components/home-page/header";
 import { Footer } from "@/components/home-page/footer";
 import {
@@ -27,7 +26,7 @@ interface BlogPost {
 async function getBlogPosts(locale: string): Promise<BlogPost[]> {
   const contentDir = path.join(process.cwd(), "src", "content", locale, "blog");
   const files = await fs.readdir(contentDir);
-  return Promise.all(
+  const posts = await Promise.all(
     files
       .filter((file) => file.endsWith(".mdx"))
       .map(async (file) => {
@@ -40,6 +39,11 @@ async function getBlogPosts(locale: string): Promise<BlogPost[]> {
           ...parsed.data,
         } as BlogPost;
       })
+  );
+  return posts.sort(
+    (a, b) =>
+      new Date(b.date).getTime() - new Date(a.date).getTime() ||
+      a.title.localeCompare(b.title)
   );
 }
 
@@ -55,65 +59,56 @@ export default async function BlogIndex({
   const blogPosts = await getBlogPosts(locale);
 
   return (
-    <div className="flex flex-col min-h-dvh relative">
+    <div className="flex min-h-dvh flex-col">
       <Header />
-      <section className="relative w-full">
-        <Image
-          src="/holo-2.webp"
-          alt="Hero Image"
-          width={1120}
-          height={630}
-          quality={100}
-          className="w-full object-cover object-center h-[350px]"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-10% to-60% from-muted/100 to-muted/0" />
-        <div className="absolute inset-0 flex flex-col justify-center px-4">
-          <div className="container mx-auto">
-            <div className="h-[98px]"></div>
-            <Breadcrumb>
-              <BreadcrumbList>
-                <BreadcrumbItem>
-                  <BreadcrumbLink href="/">{commonT("home")}</BreadcrumbLink>
-                </BreadcrumbItem>
-                <BreadcrumbSeparator />
-                <BreadcrumbItem>
-                  <BreadcrumbPage>{t("blogTitle")}</BreadcrumbPage>
-                </BreadcrumbItem>
-              </BreadcrumbList>
-            </Breadcrumb>
-            <h1 className="text-3xl mt-4 font-bold tracking-tight text-black md:text-5xl drop-shadow-xl">
-              {t("blogTitle")}
-            </h1>
-            <p className="mt-4 max-w-xl text-black md:text-xl drop-shadow-xl">
-              {t("blogDescription")}
-            </p>
-          </div>
+      <section className="border-b">
+        <div className="container max-w-5xl pt-28 pb-10 md:pt-32">
+          <Breadcrumb>
+            <BreadcrumbList>
+              <BreadcrumbItem>
+                <BreadcrumbLink href="/">{commonT("home")}</BreadcrumbLink>
+              </BreadcrumbItem>
+              <BreadcrumbSeparator />
+              <BreadcrumbItem>
+                <BreadcrumbPage>{t("blogTitle")}</BreadcrumbPage>
+              </BreadcrumbItem>
+            </BreadcrumbList>
+          </Breadcrumb>
+          <h1 className="mt-4 text-3xl font-bold tracking-tight md:text-5xl">
+            {t("blogTitle")}
+          </h1>
+          <p className="mt-3 max-w-2xl text-muted-foreground md:text-lg">
+            {t("blogDescription")}
+          </p>
         </div>
       </section>
-      <main className="flex-1 container mx-auto">
-        <div className="px-4 pb-8">
-          <ul className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {blogPosts.map((post) => (
-              <li
-                key={post.slug}
-                className="bg-white rounded-lg shadow-md p-6 transition-transform hover:scale-105"
+      <main className="container max-w-5xl flex-1 py-10">
+        <ul className="grid gap-4 md:grid-cols-2">
+          {blogPosts.map((post) => (
+            <li
+              key={post.slug}
+              className="rounded-lg border bg-card transition-colors hover:border-input"
+            >
+              <Link
+                href={{
+                  pathname: "/blog/[slug]",
+                  params: { slug: post.slug },
+                }}
+                className="block p-6"
               >
-                <Link
-                  href={{
-                    pathname: "/blog/[slug]",
-                    params: { slug: post.slug },
-                  }}
-                  className="block"
-                >
-                  <h2 className="text-xl font-semibold mb-2 hover:underline">
-                    {post.title}
-                  </h2>
-                  <p className="text-gray-600">{commonT("readMore")} →</p>
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
+                <h2 className="text-lg font-semibold tracking-tight">
+                  {post.title}
+                </h2>
+                <p className="mt-2 line-clamp-2 text-sm text-muted-foreground">
+                  {post.description}
+                </p>
+                <p className="mt-3 font-mono text-xs text-primary">
+                  {commonT("readMore")} →
+                </p>
+              </Link>
+            </li>
+          ))}
+        </ul>
       </main>
       <Footer />
     </div>

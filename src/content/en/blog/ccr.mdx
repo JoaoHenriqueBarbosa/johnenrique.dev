@@ -1,0 +1,25 @@
+---
+title: "ccr: building a Claude coding agent from scratch in Rust"
+description: "Hand-written SSE client, seven typed tools, a 900-line markdown renderer, and a typestate render pipeline the compiler enforces — 171 tests, 8.2k lines."
+date: 2026-07-05
+author: John Enrique
+keywords: [rust, ai, agent, tui, ratatui, anthropic, sse]
+---
+
+ccr is a terminal-native AI coding assistant powered by Claude — and it is not a wrapper around anything. The API client, the SSE parser, the tool suite, the render pipeline and the markdown engine are all implemented in this repo, in Rust: **8,221 lines, 171 tests** (seven of them property-based via proptest).
+
+The agentic loop is the real thing: stream the assistant turn, extract tool calls, execute them against the working tree, feed results back, repeat until there's nothing left to do. Seven built-in tools — Bash, Read, Write, Edit, Glob, Grep, WebFetch — dispatched through **typed variants, not string matching**. Tool inputs that don't parse into their types don't run.
+
+## The details that took the time
+
+The SSE client is hand-written, with byte-level UTF-8 safety: a multi-byte codepoint split across TCP chunks will never corrupt the stream. Exponential backoff on 429/529/5xx. Interleaved thinking is surfaced live in the UI as the model reasons between tool calls.
+
+The TUI is ratatui with a **markdown renderer I wrote myself** (~900 lines): syntect highlighting, box-drawing tables that word-wrap and shrink columns to the terminal width, task lists, nested blockquotes. Rendering goes through a typestate pipeline — `PreparedBlocks → measure → clip → render` — where skipping a phase is a compile error, not a runtime surprise.
+
+The whole codebase runs under a deliberately fanatical discipline, written down in the repo: no primitive types in domain fields (everything is a newtype), path-traversal guards on file tools, clippy pedantic as `deny`, two threads only — a UI thread that never blocks and a background tokio task that does the work.
+
+## Honest scope
+
+There is no Docker sandbox here — tools run on the host, protected by the path guards and blocklists; if you want a fully sandboxed agent, that's a different design (my [agent-42](/blog/agent-42) sandboxes bash in Docker, for instance). ccr is what it says: a from-scratch reimplementation of the agentic loop, built to understand every layer of it by owning every layer of it.
+
+[GitHub](https://github.com/JoaoHenriqueBarbosa/ccr)

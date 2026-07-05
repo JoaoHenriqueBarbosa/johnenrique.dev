@@ -1,0 +1,21 @@
+---
+title: "agent-42: a coding agent in one while loop"
+description: "The moment I understood agents: the intelligence is in the model, not in the framework. ~70 lines of logic, deliberately exposed."
+date: 2026-07-05
+author: John Enrique
+keywords: [python, ai, agent, llm, tool-use, minimal]
+---
+
+agent-42 records a realization: **a coding agent is a `while` loop**. Stream the model, execute the tool it asked for, append the result, go around again. When there are no more tool calls, show the text and wait for input. That's the entire mechanism — everything else that frameworks pile on top (chains, planners, memory modules, orchestrators) is packaging around this loop, and the packaging usually buries it.
+
+So agent-42 does the opposite of a framework: it **exposes the loop**. The core logic is roughly 70 lines of Python — small enough to read in one sitting. Of the ~1,000 lines in the repo, more than half are the Textual TUI; the same `run_turn` also drives a plain CLI fallback, decoupled from the interface through a dict of callbacks. The loop doesn't know what's rendering it.
+
+## What it demonstrates
+
+Interleaved thinking — the model reasons, acts, observes the result, reasons again — emerges from the loop with no orchestration at all. It's provider-agnostic. It writes code, runs it, reads the error, fixes it, and iterates, autonomously. The thesis in the README is the thesis I operate by when building agent systems professionally: **the intelligence is in the model, not in the code**. Your job is to give it clean levers and stay out of the way.
+
+## Honest scope
+
+agent-42 is an exploratory spike and labeled as one. The Docker sandbox covers only the `bash` tool — file reads and writes run on the host, guarded by path checks; the README says so instead of hand-waving "fully sandboxed". There are no tests and dependencies aren't pinned. It's a teaching artifact: read it, learn from it, fork it. For the industrial-strength version of the same convictions, see [ccr](/blog/ccr) — the same loop, in Rust, with 171 tests and a type system standing guard.
+
+[GitHub](https://github.com/JoaoHenriqueBarbosa/agent-42)

@@ -1,0 +1,21 @@
+---
+title: "ijexa: sintetizando um toque de Candomblé em Python puro"
+description: "O Ijexá como código — cinco instrumentos, slot mestre de 149ms, flam no atabaque líder, e um rum que fraseia em vez de loopar."
+date: 2026-07-05
+author: John Enrique
+keywords: [python, dsp, áudio, música, candomblé, ritmo]
+---
+
+O Ijexá é um dos toques fundamentais do Candomblé — o groove que você ouve atrás de Gilberto Gil e de incontáveis blocos afro. O ijexa o renderiza em Python puro com samples reais de percussão: agogô, caxixi, lê, rumpi e rum, cada instrumento um módulo independente que toca sozinho ou entra no mix completo.
+
+A engenharia está em levar o ritmo a sério como *sistema*. Tudo compartilha uma **grade de slots de 149ms**; o padrão de 16 slots do agogô (`A A . G . G G . A . A . G . G .`) é o ciclo mestre de 2.384ms, e os instrumentos de 8 slots rodam duas vezes por ciclo. Os padrões são strings legíveis — a notação é a estrutura de dados.
+
+## O rum não loopa
+
+O detalhe de que mais me orgulho: o rum, o atabaque mestre, não repete padrão. Na prática real do Candomblé o rum *conduz* — conversa com os dançarinos e com os outros atabaques. Então o módulo dá a ele um **vocabulário de frases** (base, dobra, chamada, corrido, resposta, virada), cada uma com função, sequenciadas pra performance se desenvolver no tempo em vez de loopar. E toda batida do rum leva **flam** — as duas mãos caindo com 37ms de diferença — porque essa nota de enfeite é metade do que faz um rum soar como rum e não como drum machine.
+
+Tem DSP de verdade por baixo — playback e mixagem de samples, reverb algorítmico, filtros Butterworth, com CuPy disponível pra empurrar o processamento pesado pra GPU — mas o ponto nunca foi a cadeia de efeitos. O ponto era transcrição como entendimento: você só descobre quanta estrutura mora num ritmo que ouviu a vida inteira quando tenta escrevê-lo como código, e o código se recusa a suingar até você notar o flam, a lógica de frases, o jeito que o ciclo respira.
+
+Cultura e DSP num repo pequeno — material de rapport, rotulado honestamente como tal, e uma das minhas coisas favoritas que já construí.
+
+[GitHub](https://github.com/JoaoHenriqueBarbosa/ijexa)

@@ -1,20 +1,16 @@
-"use client";
-
 import { Header } from "./header";
 import { Hero } from "./hero";
-import { Projects } from "./projects";
-import { Skills } from "./skills";
+import { Work } from "./work";
 import { Contact } from "./contact";
 import { Footer } from "./footer";
 
 export function HomePage() {
   return (
-    <div className="flex flex-col min-h-dvh relative">
+    <div className="flex min-h-dvh flex-col">
       <Header />
       <main className="flex-1">
         <Hero />
-        <Projects homePage />
-        <Skills />
+        <Work />
         <Contact />
       </main>
       <Footer />

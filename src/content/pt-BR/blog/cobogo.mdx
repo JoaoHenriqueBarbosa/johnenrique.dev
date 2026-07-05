@@ -1,0 +1,23 @@
+---
+title: "cobogo: o algoritmo de layout do Clay, em Rust idiomático"
+description: "Core sem dependências, internals em structure-of-arrays, API baseada em closures — o terceiro capítulo de reimplementar o mesmo layout engine entre linguagens."
+date: 2026-07-05
+author: John Enrique
+keywords: [rust, layout-engine, clay, crates, tui]
+---
+
+O cobogo é um layout engine de UI agnóstico de renderer pra Rust — um port idiomático do [Clay](https://github.com/nicbarker/clay) do Nic Barker. Ele computa posição e tamanho de cada elemento a partir de uma descrição declarativa immediate-mode e emite uma lista plana de comandos de render. Ele mesmo não desenha nada: a crate core tem **zero dependências** e nenhum código de desenho. Você descreve o layout uma vez; o backend — o renderer de terminal incluso, ou um que você escreva — é problema de outro, por design.
+
+O nome é a tese: cobogó é o tijolo modernista perfurado que estrutura luz e espaço na arquitetura brasileira. Nome justo pra uma biblioteca cujo único trabalho é estruturar espaço.
+
+## Portar sem transliterar
+
+Um port fiel não é uma transliteração. O algoritmo multipass do Clay sobrevive intacto — sizing no eixo X, quebra de texto, ajuste de aspect-ratio, propagação de altura, sizing no eixo Y, ordenação por z-index, geração de comandos, cada um uma passada distinta sobre a árvore. Mas a forma do código é a do Rust: elementos vivem em `Vec`s paralelos (structure-of-arrays) em vez de árvore de ponteiros, a geração de comandos caminha com pilha explícita em vez de recursão, e a contabilidade manual de begin/end do Clay vira closure — `with_element(id, decl, |ctx| { … })` fecha o elemento sozinho quando a closure termina. Mesmo algoritmo, idioma nativo. Tem cache de medição de texto, storage estilo arena e input handling na crate; a licença é zlib/libpng, herdada do Clay.
+
+## O arco a que isto pertence
+
+O cobogo é a terceira vez que construo sobre esse algoritmo: estudei em C no original, reimplementei em TypeScript mirando PDF ([pardal](/blog/pardal) — que roda em produção) e então reconstruí em Rust mirando terminal. Mesmo domínio, três linguagens, três alvos de render. Layout engine deixou de ser caixa-preta pra mim em algum ponto do capítulo dois — e esse é o retorno real desse tipo de projeto.
+
+Está no crates.io. O core é pequeno e honesto sobre ser cedo: um punhado de smoke tests, um algoritmo portado com fidelidade e espaço pra crescer.
+
+[GitHub](https://github.com/JoaoHenriqueBarbosa/cobogo) · [crates.io](https://crates.io/crates/cobogo)

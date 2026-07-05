@@ -1,0 +1,21 @@
+---
+title: "maya: construí reatividade estilo SolidJS em Go — pra provar que não deve ser construída"
+description: "Um framework reativo fine-grained completo compilado pra WASM, 149 testes, benchmarks — e a conclusão medida que o matou. A conclusão é o entregável."
+date: 2026-07-05
+author: John Enrique
+keywords: [go, wasm, reatividade, signals, solidjs, experimento]
+---
+
+O maya fez uma pergunta concreta: *dá pra construir reatividade fine-grained estilo SolidJS em Go idiomático, no browser via WebAssembly, usando só a biblioteca padrão?* Em vez de discutir, eu construí a coisa inteira e medi.
+
+E "a coisa inteira" é a coisa inteira: um `Signal[T]` genérico com versionamento, dependency tracking automático (effects registram quais signals leram e re-executam só quando eles mudam), `Memo`/`Computed` com cache, batching de observers, um grafo de dependências de verdade. Uma camada declarativa de widgets por cima — Container, Column, Row, Text, Button. Dois renderers, DOM e Canvas. Tudo compila pra um único `.wasm` com o compilador padrão de Go, **zero dependências de terceiros**, apoiado na stdlib moderna (`iter`, `weak`, `runtime.AddCleanup`, `//go:wasmexport`). **149 testes, ~12,4k linhas de Go**, com suítes de benchmark commitadas no repo.
+
+## A resposta foi não
+
+Os benchmarks dizem o que dizem: o garbage collector e o scheduler de goroutines do Go impõem um overhead que um modelo de invalidação fine-grained, avesso a alocação, *combate* em vez de usar. O ponto inteiro de signals é invalidação precisa e barata — e o runtime taxa exatamente isso. Então eu parei. De propósito, com os dados no repo, e o README reescrito pra enquadrar o que é: **um experimento concluído com uma conclusão**.
+
+É o projeto que eu trago quando perguntam "conta algo que não deu certo". Engenheiro júnior insiste mais forte na abordagem perdedora; a habilidade útil é reconhecer quando o substrato está errado e fechar a pergunta com evidência. Aprendi, construindo, por que o Solid é JavaScript — e por que frameworks reativos sérios evitam linguagens de GC pesado no hot path. Essa resposta era o objetivo, e foi alcançada.
+
+O framework ainda roda, o código é instrutivo de ler e a suíte está verde — corrigi os dois bugs que tinham entrado nos testes quando revisitei o repo este ano. Mas trate como experimento de referência, não como dependência. Está escrito no rótulo.
+
+[GitHub](https://github.com/JoaoHenriqueBarbosa/maya)

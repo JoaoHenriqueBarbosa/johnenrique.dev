@@ -1,0 +1,21 @@
+---
+title: "btkick: quando o Bluetooth não conecta, escale até conectar"
+description: "Um CLI + TUI em Rust pra Linux/BlueZ que automatiza a dança inteira do 'liga-desliga, repareia, arranca o dongle' — até o rebind do USB via sysfs."
+date: 2026-07-05
+author: John Enrique
+keywords: [rust, linux, bluetooth, bluez, sysfs, cli, tui]
+---
+
+Todo usuário de Linux com headset Bluetooth conhece o ritual: conecta de primeira *às vezes*, e nas outras você desliga e liga o adaptador, despareia e pareia de novo, e no fim arranca fisicamente o dongle USB e enfia de volta. Essa instabilidade é comportamento documentado do BlueZ/kernel, não um device ruim. O btkick automatiza a escada de escalada inteira — incluindo a arrancada.
+
+## A opção nuclear, em software
+
+A parte interessante é o último degrau. Arrancar o dongle é, do ponto de vista do kernel, só remoção e re-enumeração do device — e dá pra fazer isso sem tocar no hardware escrevendo no **sysfs**: unbind do device USB do driver e bind de volta, ou alternar a flag `authorized`. O btkick encontra o caminho certo do sysfs pro adaptador sozinho e executa o equivalente em software do puxão físico. Tudo escala em ordem — reconecta educadamente, reinicia o adaptador, repareia, e então chuta o kernel — e para no instante em que o device sobe.
+
+É um CLI de verdade mais uma TUI em ratatui mostrando adaptadores, devices, sinal e estado de pareamento, com painel de detalhe por device. A concorrência é real: tentativas de conexão rodam em threads coordenadas com atomics e channels, então a UI continua viva enquanto a escada sobe. Ele ainda cutuca o `pactl` pro perfil de áudio cair certo quando o headset conecta.
+
+## Escopo honesto
+
+O btkick tem **zero testes automatizados**, e o README diz isso com todas as letras em vez de esconder — o repo carrega badge de linhas de código mas deliberadamente nenhum badge de teste. Testar isso direito significa simular uma stack BlueZ se comportando mal, o que é um projeto em si. O que ele tem no lugar é uso diário: está no crates.io e conserta o Bluetooth da minha mesa várias vezes por semana. Systems programming de raio de explosão pequeno: interfaces de kernel, D-Bus, manha de hardware — o encanamento que a maioria nunca abre.
+
+[GitHub](https://github.com/JoaoHenriqueBarbosa/btkick) · [crates.io](https://crates.io/crates/btkick)

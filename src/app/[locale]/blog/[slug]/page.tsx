@@ -5,7 +5,6 @@ import { notFound } from "next/navigation";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { Locale } from "next-intl";
 import { Link } from "@/i18n/navigation";
-import Image from "next/image";
 import { Header } from "@/components/home-page/header";
 import { Footer } from "@/components/home-page/footer";
 import {
@@ -46,56 +45,44 @@ export default async function BlogPost({ params }: { params: Params }) {
     const parsed = matter(file);
     const { content, data } = parsed;
     return (
-      <div className="flex flex-col min-h-dvh relative">
+      <div className="flex min-h-dvh flex-col">
         <Header />
-        <section className="relative w-full">
-          <Image
-            src="/holo-2.webp"
-            alt="Hero Image"
-            width={1120}
-            height={630}
-            quality={100}
-            className="w-full object-cover object-center h-[350px]"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-10% to-60% from-muted/100 to-muted/0" />
-          <div className="absolute inset-0 flex flex-col px-4 justify-center">
-            <div className="container mx-auto">
-              <div className="h-[98px]"></div>
-              <Breadcrumb>
-                <BreadcrumbList>
-                  <BreadcrumbItem>
-                    <BreadcrumbLink href="/">{commonT("home")}</BreadcrumbLink>
-                  </BreadcrumbItem>
-                  <BreadcrumbSeparator />
-                  <BreadcrumbItem>
-                    <BreadcrumbLink href="/blog">
-                      {commonT("blog")}
-                    </BreadcrumbLink>
-                  </BreadcrumbItem>
-                  <BreadcrumbSeparator />
-                  <BreadcrumbItem>
-                    <BreadcrumbPage>{slug}</BreadcrumbPage>
-                  </BreadcrumbItem>
-                </BreadcrumbList>
-              </Breadcrumb>
-              <h1 className="text-3xl mt-4 font-bold tracking-tight text-black md:text-5xl drop-shadow-xl">
-                {data.title}
-              </h1>
-              <p className="mt-4 text-black md:text-xl drop-shadow-xl">
-                {data.description}
-              </p>
-            </div>
+        <section className="border-b">
+          <div className="container max-w-5xl pt-28 pb-10 md:pt-32">
+            <Breadcrumb>
+              <BreadcrumbList>
+                <BreadcrumbItem>
+                  <BreadcrumbLink href="/">{commonT("home")}</BreadcrumbLink>
+                </BreadcrumbItem>
+                <BreadcrumbSeparator />
+                <BreadcrumbItem>
+                  <BreadcrumbLink href="/blog">
+                    {commonT("blog")}
+                  </BreadcrumbLink>
+                </BreadcrumbItem>
+                <BreadcrumbSeparator />
+                <BreadcrumbItem>
+                  <BreadcrumbPage>{slug}</BreadcrumbPage>
+                </BreadcrumbItem>
+              </BreadcrumbList>
+            </Breadcrumb>
+            <h1 className="mt-4 text-3xl font-bold tracking-tight md:text-5xl">
+              {data.title}
+            </h1>
+            <p className="mt-3 max-w-2xl text-muted-foreground md:text-lg">
+              {data.description}
+            </p>
           </div>
         </section>
-        <main className="flex-1 container mx-auto z-20 max-w-6xl">
-          <div className="px-4 pb-8">
-            <article className="prose dark:prose-invert max-w-none remark">
-              <MDXRemote source={content} components={{ Projects, Link }} />
-            </article>
-            <hr />
-            <div className="mt-1">{data.author}</div>
-            <div className="mt-1">{data.date.toLocaleDateString(locale)}</div>
-          </div>
+        <main className="container max-w-5xl flex-1 pb-12">
+          <article className="remark max-w-none">
+            <MDXRemote source={content} components={{ Projects, Link }} />
+          </article>
+          <hr className="my-6 border-t" />
+          <p className="font-mono text-xs text-muted-foreground">
+            {data.author} ·{" "}
+            {data.date.toLocaleDateString(locale, { timeZone: "UTC" })}
+          </p>
         </main>
         <Footer />
       </div>

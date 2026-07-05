@@ -1,51 +1,28 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
-@custom-variant dark (&:is(.dark *));
-
 :root {
-  --background: hsl(0 0% 100%);
-  --foreground: hsl(222.2 84% 4.9%);
-  --card: hsl(0 0% 100%);
-  --card-foreground: hsl(222.2 84% 4.9%);
-  --popover: hsl(0 0% 100%);
-  --popover-foreground: hsl(222.2 84% 4.9%);
-  --primary: hsl(222.2 47.4% 11.2%);
-  --primary-foreground: hsl(210 40% 98%);
-  --secondary: hsl(210 40% 96.1%);
-  --secondary-foreground: hsl(222.2 47.4% 11.2%);
-  --muted: hsl(210 40% 96.1%);
-  --muted-foreground: hsl(215.4 16.3% 46.9%);
-  --accent: hsl(210 40% 96.1%);
-  --accent-foreground: hsl(222.2 47.4% 11.2%);
-  --destructive: hsl(0 84.2% 60.2%);
-  --destructive-foreground: hsl(210 40% 98%);
-  --border: hsl(214.3 31.8% 91.4%);
-  --input: hsl(214.3 31.8% 91.4%);
-  --ring: hsl(222.2 84% 4.9%);
+  --background: oklch(0.145 0.008 255);
+  --foreground: oklch(0.93 0.006 255);
+  --card: oklch(0.18 0.009 255);
+  --card-foreground: oklch(0.93 0.006 255);
+  --popover: oklch(0.18 0.009 255);
+  --popover-foreground: oklch(0.93 0.006 255);
+  --primary: oklch(0.87 0.185 125);
+  --primary-foreground: oklch(0.18 0.04 125);
+  --secondary: oklch(0.22 0.01 255);
+  --secondary-foreground: oklch(0.93 0.006 255);
+  --muted: oklch(0.2 0.009 255);
+  --muted-foreground: oklch(0.67 0.014 255);
+  --accent: oklch(0.23 0.012 255);
+  --accent-foreground: oklch(0.93 0.006 255);
+  --destructive: oklch(0.6 0.21 25);
+  --destructive-foreground: oklch(0.93 0.006 255);
+  --success: oklch(0.79 0.17 152);
+  --border: oklch(1 0 0 / 9%);
+  --input: oklch(1 0 0 / 14%);
+  --ring: oklch(0.87 0.185 125);
   --radius: 0.5rem;
-}
-
-.dark {
-  --background: hsl(222.2 84% 4.9%);
-  --foreground: hsl(210 40% 98%);
-  --card: hsl(222.2 84% 4.9%);
-  --card-foreground: hsl(210 40% 98%);
-  --popover: hsl(222.2 84% 4.9%);
-  --popover-foreground: hsl(210 40% 98%);
-  --primary: hsl(210 40% 98%);
-  --primary-foreground: hsl(222.2 47.4% 11.2%);
-  --secondary: hsl(217.2 32.6% 17.5%);
-  --secondary-foreground: hsl(210 40% 98%);
-  --muted: hsl(217.2 32.6% 17.5%);
-  --muted-foreground: hsl(215 20.2% 65.1%);
-  --accent: hsl(217.2 32.6% 17.5%);
-  --accent-foreground: hsl(210 40% 98%);
-  --destructive: hsl(0 62.8% 30.6%);
-  --destructive-foreground: hsl(210 40% 98%);
-  --border: hsl(217.2 32.6% 17.5%);
-  --input: hsl(217.2 32.6% 17.5%);
-  --ring: hsl(212.7 26.8% 83.9%);
 }
 
 @theme inline {
@@ -65,75 +42,92 @@
   --color-accent-foreground: var(--accent-foreground);
   --color-destructive: var(--destructive);
   --color-destructive-foreground: var(--destructive-foreground);
+  --color-success: var(--success);
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
-  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-sans-base), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-mono-base), ui-monospace, "SFMono-Regular", Menlo,
+    monospace;
 }
 
 @utility container {
   margin-inline: auto;
-  padding-inline: 2rem;
+  padding-inline: 1.5rem;
 }
 
 @layer base {
   * {
     @apply border-border;
   }
+  html {
+    color-scheme: dark;
+  }
   body {
     @apply bg-background text-foreground;
+    text-rendering: optimizeLegibility;
+  }
+  ::selection {
+    background-color: var(--primary);
+    color: var(--primary-foreground);
+  }
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
+  section[id] {
+    scroll-margin-top: 4.5rem;
   }
 }
 
-@keyframes blink {
-  0%, 50% {
-    opacity: 1;
-  }
-  50.01%, 100% {
+.bg-grid-dots {
+  background-image: radial-gradient(
+    oklch(1 0 0 / 7%) 1px,
+    transparent 1px
+  );
+  background-size: 26px 26px;
+}
+
+@keyframes rise-in {
+  from {
     opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
-.animate-blink {
-  animation: blink 1s step-end infinite;
+.animate-rise {
+  animation: rise-in 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: var(--rise-delay, 0ms);
 }
 
-.header {
-  transition: background-color 1s, height 0.3s;
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-  backdrop-filter: blur(5.3px);
-  -webkit-backdrop-filter: blur(5.3px);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  display: flex;
+@keyframes pulse-dot {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 oklch(0.79 0.17 152 / 45%);
+  }
+  50% {
+    box-shadow: 0 0 0 5px oklch(0.79 0.17 152 / 0%);
+  }
 }
 
-.header-glass {
-  background-color: rgba(0, 0, 0, 0.2);
-  height: 100px;
+.animate-pulse-dot {
+  animation: pulse-dot 2.4s ease-in-out infinite;
 }
 
-.header-glass-dark {
-  background-color: rgba(0, 0, 0, 0.6);
-  height: 80px;
-}
-
-.glassmorphic {
-  background-color: rgba(0, 0, 0, 0.6);
-  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border-radius: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.18);
-}
-
-:target::before {
-  content: "";
-  display: block;
-  height: 78px; /* fixed header height*/
-  margin: -78px 0 0; /* negative fixed header height */
+@media (prefers-reduced-motion: reduce) {
+  .animate-rise {
+    animation: none;
+  }
+  .animate-pulse-dot {
+    animation: none;
+  }
 }
 
 .remark h1:not(.noremark),
@@ -142,7 +136,7 @@
 .remark h4:not(.noremark),
 .remark h5:not(.noremark),
 .remark h6:not(.noremark) {
-  @apply font-bold my-4;
+  @apply font-semibold tracking-tight my-4;
 }
 
 .remark h1:not(.noremark) {
@@ -170,53 +164,61 @@
 }
 
 .remark p:not(.noremark) {
-  @apply text-base my-4;
+  @apply text-base leading-relaxed my-4;
 }
 
 .remark a:not(.noremark) {
-  @apply text-primary underline;
+  @apply text-primary underline underline-offset-4;
 }
 
 .remark ul:not(.noremark) {
-  @apply list-disc pl-4;
+  @apply list-disc pl-5 my-4;
 }
 
 .remark ol:not(.noremark) {
-  @apply list-decimal pl-4;
+  @apply list-decimal pl-5 my-4;
 }
 
 .remark li:not(.noremark) {
-  @apply text-base;
+  @apply text-base leading-relaxed;
 }
 
 .remark blockquote:not(.noremark) {
-  @apply border-l-4 border-primary pl-4 my-4;
+  @apply border-l-2 border-primary pl-4 my-4 text-muted-foreground;
 }
 
 .remark code:not(.noremark) {
-  @apply bg-muted-foreground text-muted rounded px-1;
+  @apply font-mono text-sm bg-secondary rounded px-1.5 py-0.5;
 }
 
 .remark pre:not(.noremark) {
-  @apply bg-muted-foreground text-muted rounded p-4 my-4 overflow-x-scroll;
+  @apply font-mono text-sm bg-secondary border rounded-lg p-4 my-4 overflow-x-auto;
+}
+
+.remark pre:not(.noremark) code:not(.noremark) {
+  @apply bg-transparent p-0;
 }
 
 .remark table:not(.noremark) {
-  @apply w-full border-collapse;
+  @apply w-full border-collapse my-4;
 }
 
 .remark th:not(.noremark) {
-  @apply text-left text-base border-b border-border p-2;
+  @apply text-left text-sm font-semibold border-b p-2;
 }
 
 .remark td:not(.noremark) {
-  @apply text-left text-base border-b border-border p-2;
+  @apply text-left text-sm border-b p-2;
 }
 
 .remark img:not(.noremark) {
-  @apply mx-auto my-4;
+  @apply mx-auto my-4 rounded-lg border;
 }
 
 .remark hr:not(.noremark) {
-  @apply my-4 border-t border-border;
+  @apply my-6 border-t;
+}
+
+.remark video {
+  @apply mx-auto my-4 rounded-lg border w-full;
 }

@@ -1,0 +1,21 @@
+---
+title: "MemBot: o projeto que me empregou, refatorado pra cumprir a própria promessa"
+description: "Um app de journaling com IA cujo post no LinkedIn rendeu meu emprego atual — e cujo TODO de 2024 ('Implementation of LangChain') eu finalmente entreguei com um StateGraph do LangGraph."
+date: 2026-07-05
+author: John Enrique
+keywords: [ia, langgraph, langchain, typescript, bun, websocket, zod]
+---
+
+O MemBot é um app de journaling com IA: escreva livremente e um pipeline classifica a entrada, extrai dados estruturados (finanças, saúde, relacionamentos) e guarda no Postgres, com insights por cima. Bun no backend, WebSockets nativos, React na frente. Tem modestas e honestas 6 estrelas — e um lugar desproporcional na minha história: o post no LinkedIn sobre este repo é o que gerou a ligação que levou ao meu emprego atual. É também onde meu trabalho com LangChain/LangGraph é **público** — os sistemas de agente que construo em produção são privados por natureza; o MemBot é a amostra verificável.
+
+## Entregando um TODO de dois anos
+
+O README original listava "Implementation of LangChain" como TODO. Este ano eu voltei e entreguei direito. O núcleo de IA v1 era um arquivo de 230 linhas de prompt chaining na mão: duas branches duplicadas (Gemini vs Ollama) escolhidas por comparação de string, um `trimJSON()` que fatiava `{...}` da saída crua do LLM na força bruta, e um bug de arquitetura de verdade — um `let chatHistory` no nível do módulo, compartilhado entre todas as conexões WebSocket, vazando contexto entre usuários.
+
+O núcleo v2 é um **StateGraph** do LangGraph: `classify → extract → persist → respond`, com aresta condicional que pula a extração quando não há categoria. A saída estruturada passa por schemas Zod via `withStructuredOutput` — o que mata o `trimJSON` de vez: as respostas do modelo são validadas e tipadas de ponta a ponta. Os providers colapsam numa única fábrica `createChatModel()` sobre o `BaseChatModel` do LangChain — Gemini e Ollama viram um caminho de código trocado por env var. O estado por conexão vive num `WeakMap` chaveado pelo socket — o bug do histórico global agora é estruturalmente impossível. O streaming filtra os eventos do grafo pra só os tokens do node `respond` chegarem ao cliente, e o protocolo WebSocket não mudou: o frontend não precisou de nada.
+
+O refactor também modernizou a stack (React 19, Vite 7, ESLint 9 flat config) e corrigiu bugs latentes achados no caminho — um CORS que só permitia GET numa API de auth toda em POST, um payload de upgrade do WebSocket que não era populado.
+
+Verificado do jeito que eu verifico: typecheck limpo, builds verdes, grafo compilando e expondo exatamente seus quatro nodes. O que não rodei foi um end-to-end completo contra Postgres vivo e LLM pago em CI — o README é honesto sobre essa linha também.
+
+[GitHub](https://github.com/JoaoHenriqueBarbosa/MemBot) · [Demo ao vivo](https://membot.vercel.app)

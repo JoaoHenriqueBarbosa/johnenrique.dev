@@ -1,0 +1,25 @@
+---
+title: "FinOpenPOS: an open-source POS that speaks Brazilian tax law"
+description: "81 stars, 54 forks, and a full NF-e/NFC-e fiscal module — the project where my fiscal work was born, running on Next.js 16 with embedded Postgres."
+date: 2026-07-05
+author: John Enrique
+keywords: [pos, nfe, nfce, nextjs, trpc, drizzle, pglite, open-source]
+---
+
+FinOpenPOS is a complete point-of-sale and inventory system: products, customers, orders, cashier, dashboards — and the part that makes it rare in open source, a **full Brazilian fiscal module**. It issues NF-e (model 55) and NFC-e (model 65), calculates ICMS across 15 CST and 10 CSOSN codes plus PIS/COFINS/IPI, signs XML with an A1 e-CNPJ certificate, talks to SEFAZ over mTLS, generates NFC-e QR codes, and falls back to contingency modes (SVC-AN, SVC-RS, EPEC) when the tax authority is down. It even ships the 14 event types for the upcoming IBS/CBS tax reform.
+
+With **81 stars and 54 forks**, it's my most-visible public project — and the forks matter more than the stars: people run this.
+
+## The architecture bet
+
+The stack is deliberately modern and deliberately self-contained: Next.js 16 App Router, React 19, tRPC v11 with end-to-end type safety, Drizzle ORM, Better Auth, and a Turborepo monorepo where the fiscal module is a standalone package. The bet that pays off for an open-source project: **PGLite — Postgres compiled to WASM, embedded in the app**. There is no database to provision. `bun install && bun run dev` and you have the whole system running, fiscal module included. Lowering the barrier to zero is why the forks exist.
+
+The API layer is documented automatically: tRPC procedures generate an OpenAPI spec rendered at `/api/docs`. Auth, sessions and the fiscal settings UI (company data, certificate upload, CSC, default tax codes) are all in the box.
+
+## Where fiscal-rs was born
+
+The fiscal module started here, in TypeScript. Porting it to Rust as a standalone library is what became [fiscal-rs](/blog/fiscal-rs) — including the 370 tests I contributed upstream to the PHP library both projects descend from. FinOpenPOS keeps its own TypeScript implementation of the fiscal engine; that independence is also what let a packaging bug in the Rust bindings go unnoticed for three releases, a story I tell in the fiscal-rs post.
+
+One codebase proving the full-stack claim, the domain claim, and the open-source claim at once — that's what FinOpenPOS is for.
+
+[GitHub](https://github.com/JoaoHenriqueBarbosa/FinOpenPOS) · [Live demo](https://fin-open-pos.vercel.app/)

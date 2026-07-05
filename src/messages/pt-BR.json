@@ -1,51 +1,58 @@
 {
-  "home": {
-    "heading": "Bem-vindo ao Site Pessoal de João Henrique"
-  },
   "common": {
     "meta": {
-      "title": "João Henrique - Site Pessoal",
-      "description": "Bem-vindo ao site pessoal de João Henrique. Explore meus projetos, blog e mais.",
-      "keywords": "Ferramentas de IA,Sistemas Complexos,Aplicações Web,Designs,Integrações"
+      "title": "John Enrique — Engenheiro Full-Stack Sênior",
+      "description": "Engenheiro Full-Stack Sênior com 9 anos construindo sistemas web — TypeScript/Next.js, Rust e tooling de agentes de IA. Mantenedor do fiscal-rs, 12 PRs mergeados no NestJS. Aberto a vagas remotas sênior.",
+      "keywords": "Engenheiro Full-Stack Sênior, TypeScript, Next.js, Rust, agentes de IA, remoto, open source"
     },
     "home": "Início",
     "projects": "Projetos",
-    "blog": "Blog",
-    "readMore": "Leia Mais"
+    "blog": "Escrita",
+    "readMore": "Ler mais"
   },
   "header": {
-    "initials": "JH",
-    "name": "João Henrique",
-    "role": "Desenvolvedor Full-Stack",
+    "name": "John Enrique",
     "nav": {
-      "blog": "Blog",
-      "work": "Trabalhos",
+      "work": "Trabalho",
+      "writing": "Escrita",
       "about": "Sobre",
-      "contact": "Contato"
+      "github": "GitHub"
     },
-    "cta": "Contrate-me"
+    "cta": "Me mande um email"
   },
   "hero": {
-    "heading": "Criando Excepcionais",
-    "typedWords": "Ferramentas de IA,Sistemas Complexos,Aplicações Web,Designs,Integrações",
-    "description": "Sou um Desenvolvedor Full-Stack apaixonado, com um olhar atento aos detalhes e comprometido em criar experiências bonitas, performáticas e amigáveis ao usuário",
-    "cta": "Ver Meus Trabalhos"
+    "availability": "Aberto a vagas remotas sênior",
+    "location": "Brasil · UTC−3",
+    "name": "John Enrique",
+    "role": "Engenheiro Full-Stack Sênior",
+    "description": "Nove anos construindo sistemas web de ponta a ponta — e provando em público: open source que outras pessoas rodam, um toolchain fiscal em Rust que eu mantenho e 12 PRs mergeados no core do NestJS.",
+    "stack": "TypeScript · React / Next.js · Rust · Node · PostgreSQL · agentes de IA",
+    "ctaPrimary": "Me mande um email",
+    "ctaSecondary": "GitHub",
+    "proofLabel": "Prova de trabalho"
   },
-  "projects": {
-    "heading": "Projetos Recentes",
-    "description": "Veja alguns dos meus trabalhos mais recentes",
-    "readMore": "Ver Mais",
-    "liveDemo": "Demonstração",
-    "more": "Mais Projetos",
-    "moreDescription": "Além destes projetos recentes selecionados, eu já fiz incontáveis outros, alguns dos quais o próprio código-fonte se perdeu no tempo. Eu falo mais sobre isso neste post do meu blog."
+  "work": {
+    "label": "Trabalhos selecionados",
+    "heading": "Código verificável, não promessas.",
+    "description": "Cada número desta página linka pra fonte pública — repositórios, registries de pacotes e pull requests mergeados.",
+    "story": "Ler a história",
+    "showAll": "Mostrar todos os {count} repos públicos",
+    "allLabel": "Todos os repos públicos",
+    "archiveLabel": "Arquivo (2016–2021)"
   },
-  "skills": {
-    "heading": "Minhas Habilidades"
+  "contact": {
+    "label": "Contato",
+    "heading": "Contratando pra uma vaga remota sênior?",
+    "description": "Estou disponível e entrevistando agora. Email é o jeito mais rápido de me alcançar — respondo em até um dia.",
+    "copy": "Copiar email",
+    "copied": "Copiado!",
+    "or": "Também em"
+  },
+  "footer": {
+    "copyright": "© {year} John Enrique",
+    "source": "Código do site"
   },
   "notFound": {
-    "meta": {
-      "title": "Página não encontrada"
-    },
     "heading": "Página não encontrada"
   },
   "projectPage": {
@@ -53,38 +60,17 @@
     "viewOnGitHub": "Ver no GitHub",
     "readme": "README",
     "readmeplaceholder": "Carregando conteúdo do README...",
-    "features": "Funcionalidades",
-    "noPublicAccessTitle": "Acesso publico não disponível",
-    "noPublicAccessDescription": "Este projeto não é open-source e não tem acesso publico. Por favor, entre em contato se você se interessar."
+    "noPublicAccessTitle": "Acesso público não disponível",
+    "noPublicAccessDescription": "Este projeto não é open-source e não tem acesso público. Entre em contato se você se interessar."
   },
   "blogPage": {
-    "pageTitle": "Blog - João Henrique",
-    "blogTitle": "Blog",
-    "blogDescription": "Explore meus pensamentos, experiencias e insights em diversos temas relacionados ao desenvolvimento de software, tecnologia e mais."
+    "blogTitle": "Escrita",
+    "blogDescription": "Notas sobre engenharia de software — sistemas, tooling e lições de projetos reais."
   },
-  "contact": {
-    "heading": "Entre em Contato",
-    "description": "Sinta-se à vontade para entrar em contato comigo para qualquer consulta ou oportunidade.",
-    "name": "Nome",
-    "email": "E-mail",
-    "message": "Mensagem",
-    "submit": "Enviar Mensagem",
-    "sending": "Enviando...",
-    "success": "Mensagem enviada com sucesso!",
-    "error": "Ocorreu um erro. Por favor, tente novamente."
-  },
-  "footer": {
-    "aboutUs": "Sobre Nós",
-    "copyright": "João Henrique, {year}",
-    "quickLinks": "Links Rápidos",
-    "home": "Início",
-    "projects": "Projetos",
-    "blog": "Blog",
-    "privacyPolicy": "Política de Privacidade",
-    "termsOfService": "Termos de Serviço",
-    "newsletter": "Mantenha contato",
-    "newsletterDescription": "Fique atualizado com minhas novidades e projetos.",
-    "emailPlaceholder": "Digite seu e-mail",
-    "subscribe": "Inscrever-se"
+  "projects": {
+    "heading": "Projetos em destaque",
+    "description": "Alguns dos meus projetos recentes",
+    "readMore": "Ler mais",
+    "liveDemo": "Demonstração"
   }
 }

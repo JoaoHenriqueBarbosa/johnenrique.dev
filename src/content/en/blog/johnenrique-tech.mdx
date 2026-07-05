@@ -1,0 +1,23 @@
+---
+title: "johnenrique.tech: rebuilding this site in the open"
+description: "From a 2019-looking portfolio with 3MB hero images to a fully static Next 16 site with two client components — the rework you're reading right now."
+date: 2026-07-05
+author: John Enrique
+keywords: [nextjs, react, tailwind, performance, i18n, meta]
+---
+
+This site is a repo like the others, so it gets a post like the others.
+
+The previous version was a 2019 time capsule: holographic stock-art heroes weighing 3.2MB, glassmorphism, a typing-cursor animation, a skills carousel, and copy about being a "passionate developer". Worse than dated looks, it was a **stale cache of me** — it still sold the stack I worked with years ago, while my actual public work (a Rust fiscal toolchain, agent SDKs, merged framework PRs) was invisible.
+
+## What the rebuild is
+
+Next.js 16 with the App Router, React 19, Tailwind 4 — and a deliberate architecture: **every page is static**, and the homepage ships exactly two small client components (the language switcher and a copy-email button). Everything else is server components with zero client JavaScript. The 3.2MB of hero images became zero: the largest contentful paint is now a headline in a preloaded font.
+
+The bilingual routing works without middleware. English is served unprefixed at the root and Portuguese under `/pt-BR`, implemented with rewrites at the routing layer — a request to `/` is internally rewritten into the localized tree, and `/en/*` URLs canonicalize away with a 308. No runtime code runs to decide a locale.
+
+The content system follows one rule, borrowed from how I maintain my repos: **every number on the site links to its public source, and every claim was verified against it before publishing** — stars from the GitHub API, package versions from the registries, merged PR counts from the actual search URL you can click. The site describes the work by less rather than by more, because the fastest way to lose a technical reader is one inflated claim.
+
+The source is public, like everything else it describes.
+
+[GitHub](https://github.com/JoaoHenriqueBarbosa/johnenrique.tech)

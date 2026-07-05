@@ -1,0 +1,21 @@
+---
+title: "tabletop-p2p: um virtual tabletop 3D sem servidor de jogo"
+description: "Rust + Bevy, WebRTC entre peers, o Mestre como host autoritativo — terreno low-poly deformável e arte SVG procedural rasterizada em runtime."
+date: 2026-07-05
+author: John Enrique
+keywords: [rust, bevy, webrtc, p2p, gamedev, vtt]
+---
+
+O tabletop-p2p é um virtual tabletop tático — o pitch que eu uso é "a câmera do Baldur's Gate 3, mas é um VTT". É construído em Rust sobre Bevy, e a restrição que o define está no nome: **peer-to-peer**. Não existe servidor de jogo. Um serviço mínimo de sinalização troca os handshakes do WebRTC e sai da frente; todo byte de estado de jogo flui direto entre os jogadores por DataChannels.
+
+Sem servidor não significa sem autoridade. O **Mestre é o host autoritativo**: jogadores mandam requests — mover este token, criar aquele — e o GM valida e faz o broadcast. Infraestrutura barata, e resistente a trapaça o bastante pra uma mesa de amigos. Salas são um código de cinco caracteres; se a sinalização cai, os clientes tentam de novo com backoff, e quando o GM volta todo mundo refaz o handshake e recebe um resync completo.
+
+## A cena é 3D de verdade
+
+Câmera orbital, luz direcional com sombras, e terreno feito de prismas low-poly — deformar o chão eleva a altura real da coluna, e os tokens em cima sobem junto. Tokens são peças com corpo: um puck, um disco de arte e um anel na cor do dono. As árvores são low-poly procedurais. Grid quadrado e hexagonal flat-top (coordenadas axiais), alternáveis pelo GM, com snap nos dois.
+
+Minha decisão de pipeline favorita: toda a arte 2D — faces dos tokens, o mapa-pergaminho padrão, ícones — é **SVG gerado no repositório e rasterizado em runtime** com `resvg`, aplicado como textura nos meshes. Arte procedural versionada em git; zero blob binário. Importar um mapa de verdade é arrastar e soltar: a imagem é fatiada em chunks de 14KB e replicada a cada peer pelo data channel.
+
+É o projeto mais novo desta página e assume isso — existe porque eu queria que a minha mesa de RPG tivesse essa ferramenta, e porque ECS do Bevy mais rede WebRTC é exatamente o tipo de problema de sistemas de que eu gosto. O `dist/` já traz binários Linux portáveis com assets embutidos: duas máquinas numa LAN jogam hoje.
+
+[GitHub](https://github.com/JoaoHenriqueBarbosa/tabletop-p2p)

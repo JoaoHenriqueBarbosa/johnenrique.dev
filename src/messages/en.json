@@ -1,90 +1,76 @@
 {
-  "home": {
-    "heading": "Welcome to John Enrique's Personal Website"
-  },
   "common": {
     "meta": {
-      "title": "John Enrique - Personal Website",
-      "description": "Welcome to John Enrique's personal website. Explore my projects, blog, and more.",
-      "keywords": "AI Tools,Complex Systems,Web Apps,Designs,Middlewares"
+      "title": "John Enrique — Senior Full-Stack Engineer",
+      "description": "Senior Full-Stack Engineer with 9 years shipping web systems — TypeScript/Next.js, Rust and AI agent tooling. Maintainer of fiscal-rs, 12 PRs merged into NestJS. Open to senior remote roles.",
+      "keywords": "Senior Full-Stack Engineer, TypeScript, Next.js, Rust, AI agents, remote, open source"
     },
     "home": "Home",
     "projects": "Projects",
-    "blog": "Blog",
-    "readMore": "Read More"
+    "blog": "Writing",
+    "readMore": "Read more"
   },
   "header": {
-    "initials": "JE",
     "name": "John Enrique",
-    "role": "Full-Stack Developer",
     "nav": {
-      "blog": "Blog",
       "work": "Work",
+      "writing": "Writing",
       "about": "About",
-      "contact": "Contact"
+      "github": "GitHub"
     },
-    "cta": "Hire Me"
+    "cta": "Email me"
   },
   "hero": {
-    "heading": "Crafting Exceptional",
-    "typedWords": "AI Tools,Complex Systems,Web Apps,Designs,Middlewares",
-    "description": "I'm a passionate Full-Stack Developer with a keen eye for detail and a commitment to creating beautiful, performant, and user-friendly experiences",
-    "cta": "View My Work"
+    "availability": "Open to senior remote roles",
+    "location": "Brazil · UTC−3",
+    "name": "John Enrique",
+    "role": "Senior Full-Stack Engineer",
+    "description": "Nine years shipping web systems end to end — and proving it in public: open source that other people run, a Rust fiscal toolchain I maintain, and 12 PRs merged into NestJS core.",
+    "stack": "TypeScript · React / Next.js · Rust · Node · PostgreSQL · AI agents",
+    "ctaPrimary": "Email me",
+    "ctaSecondary": "GitHub",
+    "proofLabel": "Proof of work"
   },
-  "projects": {
-    "heading": "Featured Projects",
-    "description": "Check out some of my recent projects",
-    "readMore": "Read More",
-    "liveDemo": "Live Demo",
-    "more": "More Projects",
-    "moreDescription": "Besides these recent selected projects, I have done countless others, some of which the source code has been lost over time. I talk more about this in this post on my blog."
+  "work": {
+    "label": "Selected work",
+    "heading": "Code you can verify, not claims.",
+    "description": "Every number on this page links to its public source — repositories, package registries and merged pull requests.",
+    "story": "Read the story",
+    "showAll": "Show all {count} public repos",
+    "allLabel": "All public repos",
+    "archiveLabel": "Archive (2016–2021)"
   },
-  "skills": {
-    "heading": "My Skills"
+  "contact": {
+    "label": "Contact",
+    "heading": "Hiring for a senior remote role?",
+    "description": "I'm available and interviewing now. Email is the fastest way to reach me — I reply within a day.",
+    "copy": "Copy email",
+    "copied": "Copied!",
+    "or": "Elsewhere"
+  },
+  "footer": {
+    "copyright": "© {year} John Enrique",
+    "source": "Site source"
   },
   "notFound": {
-    "meta": {
-      "title": "Page not found"
-    },
     "heading": "Page not found"
   },
   "projectPage": {
-    "liveDemo": "Live Demo",
+    "liveDemo": "Live demo",
     "viewOnGitHub": "View on GitHub",
     "readme": "README",
     "readmeplaceholder": "Loading README content...",
-    "features": "Features",
     "noPublicAccessTitle": "Public access not available",
     "noPublicAccessDescription": "This project is not open-source and does not have public access. Please contact me if you are interested."
   },
   "blogPage": {
-    "pageTitle": "Blog - John Enrique",
-    "blogTitle": "Blog",
-    "blogDescription": "Explore my thoughts, experiences, and insights on various topics related to software development, technology, and more."
+    "blogTitle": "Writing",
+    "blogDescription": "Notes on software engineering — systems, tooling and lessons from real projects."
   },
-  "contact": {
-    "heading": "Get in Touch",
-    "description": "Feel free to reach out to me for any inquiries or opportunities.",
-    "name": "Name",
-    "email": "Email",
-    "message": "Message",
-    "submit": "Send Message",                                                                                                                  
-    "sending": "Sending...",                                                                                                                      
-    "success": "Message sent successfully!",                                                                                                      
-    "error": "An error occurred. Please try again."
-  },
-  "footer": {
-    "aboutUs": "About Us",
-    "copyright": "John Enrique, {year}",
-    "quickLinks": "Quick Links",
-    "home": "Home",
-    "projects": "Projects",
-    "blog": "Blog",
-    "privacyPolicy": "Privacy Policy",
-    "termsOfService": "Terms of Service",
-    "newsletter": "Keep in touch",
-    "newsletterDescription": "Stay updated with my latest news and projects.",
-    "emailPlaceholder": "Enter your email",
-    "subscribe": "Subscribe"
+  "projects": {
+    "heading": "Featured projects",
+    "description": "Some of my recent projects",
+    "readMore": "Read more",
+    "liveDemo": "Live demo"
   }
 }

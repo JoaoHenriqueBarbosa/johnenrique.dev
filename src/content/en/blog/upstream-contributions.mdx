@@ -1,0 +1,25 @@
+---
+title: "Contributing upstream: 12 PRs in NestJS core, 370 tests into sped-nfe"
+description: "The proof that's hardest to fake — code accepted by the maintainers of projects thousands of teams depend on."
+date: 2026-07-05
+author: John Enrique
+keywords: [nestjs, open-source, sped-nfe, testing, upstream]
+---
+
+Anyone can star their own repos. Getting code merged into projects the industry depends on is a different kind of signal, because someone with no stake in your career has to review it and say yes.
+
+## NestJS
+
+I have **12 pull requests merged into [nestjs/nest](https://github.com/nestjs/nest/pulls?q=is%3Apr+author%3AJoaoHenriqueBarbosa+is%3Amerged)**, the framework's main repository, approved by its creator and maintainer, Kamil Myśliwiec. A cluster of them added end-to-end tests to the official samples — gRPC, request context, MVC over Fastify — which is unglamorous work that requires knowing how the framework behaves from the inside, not just how to consume it. I'd shipped NestJS in production for years; contributing tests to its official examples was how I paid the tooling back.
+
+## sped-nfe
+
+While porting Brazil's most-used fiscal library from PHP to Rust (the project that became [fiscal-rs](/blog/fiscal-rs)), I had to understand every corner of the original's behavior — and testing my understanding produced tests the original didn't have. So I sent them upstream: [PR #1313](https://github.com/nfephp-org/sped-nfe/pull/1313), **370 tests**, raising the library's coverage from 40% to 86.5%. Merged into a codebase with 2,400+ stars that processes real invoices for real companies every day.
+
+## Why tests, both times
+
+It's not a coincidence that both contributions are test suites. Tests are the contribution a maintainer can accept with confidence, because they don't ask anyone to trust my judgment — they demonstrate the behavior and lock it in. They're also how I learn a codebase: if I can't write a test for it, I don't understand it yet.
+
+Both links above go to the public record. That's the point.
+
+[NestJS merged PRs](https://github.com/nestjs/nest/pulls?q=is%3Apr+author%3AJoaoHenriqueBarbosa+is%3Amerged) · [sped-nfe #1313](https://github.com/nfephp-org/sped-nfe/pull/1313)

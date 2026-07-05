@@ -1,0 +1,25 @@
+---
+title: "Contribuindo upstream: 12 PRs no core do NestJS, 370 testes no sped-nfe"
+description: "A prova mais difícil de forjar — código aceito pelos mantenedores de projetos dos quais milhares de times dependem."
+date: 2026-07-05
+author: John Enrique
+keywords: [nestjs, open-source, sped-nfe, testes, upstream]
+---
+
+Qualquer um pode estrelar os próprios repos. Ter código mergeado em projetos dos quais a indústria depende é um sinal de outra natureza, porque alguém sem nenhum interesse na sua carreira precisa revisar e dizer sim.
+
+## NestJS
+
+Tenho **12 pull requests mergeados no [nestjs/nest](https://github.com/nestjs/nest/pulls?q=is%3Apr+author%3AJoaoHenriqueBarbosa+is%3Amerged)**, o repositório principal do framework, aprovados pelo seu criador e mantenedor, Kamil Myśliwiec. Um grupo deles adicionou testes end-to-end aos samples oficiais — gRPC, request context, MVC sobre Fastify — trabalho sem glamour que exige conhecer o comportamento do framework por dentro, não só saber consumi-lo. Usei NestJS em produção por anos; contribuir testes pros exemplos oficiais foi como paguei de volta.
+
+## sped-nfe
+
+Portando a biblioteca fiscal mais usada do Brasil de PHP pra Rust (o projeto que virou o [fiscal-rs](/blog/fiscal-rs)), precisei entender cada canto do comportamento do original — e testar meu entendimento produziu testes que o original não tinha. Então mandei upstream: [PR #1313](https://github.com/nfephp-org/sped-nfe/pull/1313), **370 testes**, elevando a cobertura da biblioteca de 40% pra 86,5%. Mergeado num codebase com 2.400+ estrelas que processa notas de verdade pra empresas de verdade todos os dias.
+
+## Por que testes, nas duas vezes
+
+Não é coincidência que as duas contribuições sejam suítes de teste. Teste é a contribuição que um mantenedor aceita com confiança, porque não pede que ninguém confie no meu julgamento — demonstra o comportamento e o trava. Também é como eu aprendo um codebase: se não consigo escrever um teste pra algo, ainda não entendi.
+
+Os dois links acima vão pro registro público. Esse é o ponto.
+
+[PRs mergeados no NestJS](https://github.com/nestjs/nest/pulls?q=is%3Apr+author%3AJoaoHenriqueBarbosa+is%3Amerged) · [sped-nfe #1313](https://github.com/nfephp-org/sped-nfe/pull/1313)
