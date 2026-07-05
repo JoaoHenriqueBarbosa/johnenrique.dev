@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { Locale } from "next-intl";
 import { Link } from "@/i18n/navigation";
+import { JsonLd } from "@/components/json-ld";
 import { Header } from "@/components/home-page/header";
 import { Footer } from "@/components/home-page/footer";
 import {
@@ -43,8 +44,50 @@ export default async function BlogPost({ params }: { params: Params }) {
     const file = await fs.readFile(filePath, "utf8");
     const parsed = matter(file);
     const { content, data } = parsed;
+    const base = process.env.NEXT_PUBLIC_SITE_URL ?? "https://johnenrique.tech";
+    const prefix = locale === "en" ? "" : "/pt-BR";
+    const url = `${base}${prefix}/blog/${slug}`;
     return (
       <div className="flex min-h-dvh flex-col">
+        <JsonLd
+          data={{
+            "@context": "https://schema.org",
+            "@type": "BlogPosting",
+            headline: data.title,
+            description: data.description,
+            datePublished: data.date.toISOString(),
+            dateModified: data.date.toISOString(),
+            inLanguage: locale,
+            url,
+            mainEntityOfPage: url,
+            author: {
+              "@type": "Person",
+              name: data.author,
+              url: base,
+            },
+          }}
+        />
+        <JsonLd
+          data={{
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            itemListElement: [
+              {
+                "@type": "ListItem",
+                position: 1,
+                name: "Home",
+                item: `${base}${prefix || "/"}`,
+              },
+              {
+                "@type": "ListItem",
+                position: 2,
+                name: "Blog",
+                item: `${base}${prefix}/blog`,
+              },
+              { "@type": "ListItem", position: 3, name: data.title },
+            ],
+          }}
+        />
         <Header />
         <section className="border-b">
           <div className="container max-w-5xl pt-28 pb-10 md:pt-32">
