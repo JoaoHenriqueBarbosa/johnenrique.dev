@@ -6,14 +6,14 @@
       "keywords": "Engenheiro Full-Stack Sênior, TypeScript, Next.js, Rust, agentes de IA, remoto, open source"
     },
     "home": "Início",
-    "blog": "Escrita",
+    "blog": "Blog",
     "readMore": "Ler mais"
   },
   "header": {
     "name": "John Enrique",
     "nav": {
       "work": "Trabalho",
-      "writing": "Escrita",
+      "writing": "Blog",
       "about": "Sobre",
       "github": "GitHub"
     },
@@ -55,7 +55,7 @@
     "heading": "Página não encontrada"
   },
   "blogPage": {
-    "blogTitle": "Escrita",
+    "blogTitle": "Blog",
     "blogDescription": "Notas sobre engenharia de software — sistemas, tooling e lições de projetos reais."
   },
   "caseStudy": {
