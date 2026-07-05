@@ -8,8 +8,8 @@ export function Contact() {
   return (
     <section id="contact" className="border-t">
       <div className="container max-w-5xl py-20 md:py-28">
-        <p className="font-mono text-[11px] tracking-widest text-muted-foreground/70 uppercase">
-          02 — {t("label")}
+        <p className="font-mono text-[11px] tracking-widest text-muted-foreground uppercase">
+          03 — {t("label")}
         </p>
         <h2 className="mt-4 max-w-2xl text-3xl font-bold tracking-tight text-balance md:text-4xl">
           {t("heading")}
@@ -24,7 +24,7 @@ export function Contact() {
           >
             {site.email}
           </a>
-          <CopyEmail />
+          <CopyEmail copyLabel={t("copy")} copiedLabel={t("copied")} />
         </div>
         <p className="mt-10 font-mono text-xs text-muted-foreground">
           {t("or")}{" "}

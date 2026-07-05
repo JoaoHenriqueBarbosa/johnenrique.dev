@@ -6,7 +6,6 @@
       "keywords": "Engenheiro Full-Stack Sênior, TypeScript, Next.js, Rust, agentes de IA, remoto, open source"
     },
     "home": "Início",
-    "projects": "Projetos",
     "blog": "Escrita",
     "readMore": "Ler mais"
   },
@@ -55,22 +54,21 @@
   "notFound": {
     "heading": "Página não encontrada"
   },
-  "projectPage": {
-    "liveDemo": "Demonstração",
-    "viewOnGitHub": "Ver no GitHub",
-    "readme": "README",
-    "readmeplaceholder": "Carregando conteúdo do README...",
-    "noPublicAccessTitle": "Acesso público não disponível",
-    "noPublicAccessDescription": "Este projeto não é open-source e não tem acesso público. Entre em contato se você se interessar."
-  },
   "blogPage": {
     "blogTitle": "Escrita",
     "blogDescription": "Notas sobre engenharia de software — sistemas, tooling e lições de projetos reais."
   },
-  "projects": {
-    "heading": "Projetos em destaque",
-    "description": "Alguns dos meus projetos recentes",
-    "readMore": "Ler mais",
-    "liveDemo": "Demonstração"
+  "caseStudy": {
+    "label": "Estudo de caso",
+    "heading": "Como é manter de verdade",
+    "intro": "A prova mais forte não é um repo — é o que acontece quando outras pessoas passam a depender de um. O fiscal-rs começou como um port que escrevi sozinho; hoje a comunidade o estende e meu trabalho é segurar a régua.",
+    "beat1Title": "16 PRs triados, 11 mergeados",
+    "beat1Text": "Contribuições da comunidade em MDF-e, CT-e e NFS-e — revisadas, testadas localmente e publicadas em releases coordenados no crates.io.",
+    "beat2Title": "Uma régua de segurança, mantida",
+    "beat2Text": "A revisão bloqueou um symlink attack via diretório temporário previsível e um panic em certificado A1 legado — ambos reproduzidos antes de pedir mudanças.",
+    "beat3Title": "Um bug de 3 releases, pego",
+    "beat3Text": "O pacote npm saía quebrado desde o 0.7.0 e ninguém percebeu — não havia consumidor real. Eu instalei, achei, corrigi, e migrei a publicação pra OIDC com provenance SLSA assinada.",
+    "closing": "Toda alegação acima é pública — os pull requests, os releases, o log de provenance.",
+    "cta": "Ler a história completa"
   }
 }

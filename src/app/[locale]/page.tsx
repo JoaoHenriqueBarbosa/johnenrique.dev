@@ -19,32 +19,21 @@ export async function generateMetadata({
       title: t("meta.title"),
       description: t("meta.description"),
       type: "website",
-      url: `${process.env.NEXT_PUBLIC_SITE_URL}/${locale}`,
-      images: [
-        {
-          url: `${process.env.NEXT_PUBLIC_SITE_URL}/john.jpg`,
-          width: 1200,
-          height: 630,
-          alt: t("meta.title"),
-        },
-      ],
+      url: locale === "en" ? "/" : "/pt-BR",
       siteName: t("meta.title"),
     },
     alternates: {
-      canonical: `${process.env.NEXT_PUBLIC_SITE_URL}/${locale}`,
+      canonical: locale === "en" ? "/" : "/pt-BR",
+      languages: {
+        "en": "/",
+        "pt-BR": "/pt-BR",
+        "x-default": "/",
+      },
     },
     twitter: {
       card: "summary_large_image",
       title: t("meta.title"),
       description: t("meta.description"),
-      images: [
-        {
-          url: `${process.env.NEXT_PUBLIC_SITE_URL}/john.jpg`,
-          width: 1200,
-          height: 630,
-          alt: t("meta.title"),
-        },
-      ],
     },
   };
 }

@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { Locale } from "next-intl";
 import matter from "gray-matter";
+import { Link } from "@/i18n/navigation";
 import { Header } from "@/components/home-page/header";
 import { Footer } from "@/components/home-page/footer";
 import {
@@ -49,7 +50,9 @@ export default async function Page({ params }: { params: Params }) {
             <Breadcrumb>
               <BreadcrumbList>
                 <BreadcrumbItem>
-                  <BreadcrumbLink href="/">{t("home")}</BreadcrumbLink>
+                  <BreadcrumbLink asChild>
+                    <Link href="/">{t("home")}</Link>
+                  </BreadcrumbLink>
                 </BreadcrumbItem>
                 <BreadcrumbSeparator />
                 <BreadcrumbItem>
@@ -96,48 +99,25 @@ export async function generateMetadata({ params }: { params: Params }) {
     const { data } = matter(source);
     const t = await getTranslations({ locale, namespace: "common" });
 
+    const enPath = `/${slug}`;
+    const ptPath = `/pt-BR/${slug}`;
     return {
       title: `${data.title} | ${t("meta.title")}`,
-      description: data.description || t("meta.keywords"),
-      keywords: data.keywords ? data.keywords.join(", ") : t("meta.keywords"),
+      description: data.description,
       openGraph: {
         title: `${data.title} | ${t("meta.title")}`,
-        description: data.description || t("meta.keywords"),
-        type: "article",
-        url: `${process.env.NEXT_PUBLIC_SITE_URL}/${locale}/${slug}`,
-        publishedTime: data.date ? new Date(data.date).toISOString() : undefined,
-        images: data.cover
-          ? [
-              {
-                url: `${process.env.NEXT_PUBLIC_SITE_URL}/${data.cover}`,
-                width: 1200,
-                height: 630,
-                alt: data.title,
-              },
-            ]
-          : [
-              {
-                url: `${process.env.NEXT_PUBLIC_SITE_URL}/john.jpg`,
-                width: 1200,
-                height: 630,
-                alt: data.title,
-              },
-            ],
+        description: data.description,
+        type: "website",
+        url: locale === "en" ? enPath : ptPath,
         siteName: t("meta.title"),
       },
-      canonical: `${process.env.NEXT_PUBLIC_SITE_URL}/${locale}/${slug}`,
-      twitter: {
-        card: "summary_large_image",
-        title: `${data.title} | ${t("meta.title")}`,
-        description: data.description || t("meta.keywords"),
-        images: [
-          {
-            url: `${process.env.NEXT_PUBLIC_SITE_URL}/john.jpg`,
-            width: 1200,
-            height: 630,
-            alt: data.title,
-          },
-        ],
+      alternates: {
+        canonical: locale === "en" ? enPath : ptPath,
+        languages: {
+          "en": enPath,
+          "pt-BR": ptPath,
+          "x-default": enPath,
+        },
       },
     };
   } catch (error) {

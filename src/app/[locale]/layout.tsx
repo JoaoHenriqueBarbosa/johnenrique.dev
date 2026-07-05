@@ -29,6 +29,9 @@ export function generateStaticParams() {
 }
 
 export const metadata = {
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_SITE_URL ?? "https://johnenrique.tech"
+  ),
   icons: {
     icon: [
       { url: "/icons/16.ico", sizes: "16x16" },
@@ -61,7 +64,8 @@ export default async function RootLayout({
           fontMono.variable
         )}
       >
-        <NextIntlClientProvider>{children}</NextIntlClientProvider>
+        {/* Client islands only need the locale, never message strings */}
+        <NextIntlClientProvider messages={{}}>{children}</NextIntlClientProvider>
         <Analytics />
       </body>
     </html>

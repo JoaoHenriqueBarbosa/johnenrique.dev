@@ -6,7 +6,6 @@
       "keywords": "Senior Full-Stack Engineer, TypeScript, Next.js, Rust, AI agents, remote, open source"
     },
     "home": "Home",
-    "projects": "Projects",
     "blog": "Writing",
     "readMore": "Read more"
   },
@@ -55,22 +54,21 @@
   "notFound": {
     "heading": "Page not found"
   },
-  "projectPage": {
-    "liveDemo": "Live demo",
-    "viewOnGitHub": "View on GitHub",
-    "readme": "README",
-    "readmeplaceholder": "Loading README content...",
-    "noPublicAccessTitle": "Public access not available",
-    "noPublicAccessDescription": "This project is not open-source and does not have public access. Please contact me if you are interested."
-  },
   "blogPage": {
     "blogTitle": "Writing",
     "blogDescription": "Notes on software engineering — systems, tooling and lessons from real projects."
   },
-  "projects": {
-    "heading": "Featured projects",
-    "description": "Some of my recent projects",
-    "readMore": "Read more",
-    "liveDemo": "Live demo"
+  "caseStudy": {
+    "label": "Case study",
+    "heading": "What maintaining looks like",
+    "intro": "The strongest proof isn't a repo — it's what happens when other people start depending on one. fiscal-rs began as a port I wrote alone; today the community extends it and my job is to hold the line.",
+    "beat1Title": "16 PRs triaged, 11 merged",
+    "beat1Text": "Community contributions across MDF-e, CT-e and NFS-e — reviewed, tested locally and shipped in coordinated crates.io releases.",
+    "beat2Title": "A security bar, held",
+    "beat2Text": "Review blocked a symlink attack via predictable temp dirs and a panic on legacy A1 certificates — both reproduced before requesting changes.",
+    "beat3Title": "A 3-release-old bug, caught",
+    "beat3Text": "The npm package had shipped broken since 0.7.0 and nobody noticed — there was no real consumer. I installed it, found it, fixed it, and moved publishing to OIDC with signed SLSA provenance.",
+    "closing": "Every claim above is public — the pull requests, the releases, the provenance log.",
+    "cta": "Read the full story"
   }
 }

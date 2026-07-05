@@ -42,7 +42,7 @@ export function Hero() {
           {t("description")}
         </p>
         <p
-          className="animate-rise mt-5 font-mono text-xs tracking-wide text-muted-foreground/80 md:text-sm"
+          className="animate-rise mt-5 font-mono text-xs tracking-wide text-muted-foreground md:text-sm"
           style={{ "--rise-delay": "180ms" } as React.CSSProperties}
         >
           {t("stack")}
@@ -76,7 +76,7 @@ export function Hero() {
           className="animate-rise mt-16 border-t pt-6"
           style={{ "--rise-delay": "300ms" } as React.CSSProperties}
         >
-          <p className="font-mono text-[11px] tracking-widest text-muted-foreground/70 uppercase">
+          <p className="font-mono text-[11px] tracking-widest text-muted-foreground uppercase">
             {t("proofLabel")}
           </p>
           <ul className="mt-3 flex flex-wrap gap-x-8 gap-y-2">

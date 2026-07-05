@@ -16,7 +16,7 @@ export function Work() {
   return (
     <section id="work" className="border-t">
       <div className="container max-w-5xl py-20 md:py-28">
-        <p className="font-mono text-[11px] tracking-widest text-muted-foreground/70 uppercase">
+        <p className="font-mono text-[11px] tracking-widest text-muted-foreground uppercase">
           01 — {t("label")}
         </p>
         <h2 className="mt-4 max-w-2xl text-3xl font-bold tracking-tight text-balance md:text-4xl">
@@ -32,7 +32,7 @@ export function Work() {
         </div>
         <ShowMore label={t("showAll", { count: more.length + archive.length })}>
           <div className="mt-14">
-            <p className="font-mono text-[11px] tracking-widest text-muted-foreground/70 uppercase">
+            <p className="font-mono text-[11px] tracking-widest text-muted-foreground uppercase">
               {t("allLabel")}
             </p>
             <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
@@ -40,7 +40,7 @@ export function Work() {
                 <MiniItem key={item.name} item={item} storyLabel={t("story")} />
               ))}
             </div>
-            <p className="mt-10 font-mono text-[11px] tracking-widest text-muted-foreground/70 uppercase">
+            <p className="mt-10 font-mono text-[11px] tracking-widest text-muted-foreground uppercase">
               {t("archiveLabel")}
             </p>
             <ul className="mt-3 flex flex-wrap gap-x-5 gap-y-1.5">
@@ -156,7 +156,7 @@ function MiniItem({
           {item.tagline}
         </p>
         {item.metrics && (
-          <p className="mt-2 font-mono text-[10px] text-muted-foreground/80">
+          <p className="mt-2 font-mono text-[10px] text-muted-foreground">
             {item.metrics.join(" · ")}
           </p>
         )}

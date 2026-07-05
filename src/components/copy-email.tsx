@@ -2,11 +2,15 @@
 
 import { useState } from "react";
 import { CheckIcon, CopyIcon } from "lucide-react";
-import { useTranslations } from "next-intl";
 import { site } from "@/lib/site";
 
-export function CopyEmail() {
-  const t = useTranslations("contact");
+export function CopyEmail({
+  copyLabel,
+  copiedLabel,
+}: {
+  copyLabel: string;
+  copiedLabel: string;
+}) {
   const [copied, setCopied] = useState(false);
 
   return (
@@ -24,7 +28,7 @@ export function CopyEmail() {
       ) : (
         <CopyIcon className="size-3.5" />
       )}
-      {copied ? t("copied") : t("copy")}
+      {copied ? copiedLabel : copyLabel}
     </button>
   );
 }

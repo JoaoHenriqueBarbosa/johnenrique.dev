@@ -16,7 +16,6 @@ import {
   BreadcrumbPage,
 } from "@/components/ui/breadcrumb";
 import matter from "gray-matter";
-import { Projects } from "@/components/home-page/projects";
 
 type Params = Promise<{ slug: string; locale: Locale }>;
 
@@ -52,12 +51,14 @@ export default async function BlogPost({ params }: { params: Params }) {
             <Breadcrumb>
               <BreadcrumbList>
                 <BreadcrumbItem>
-                  <BreadcrumbLink href="/">{commonT("home")}</BreadcrumbLink>
+                  <BreadcrumbLink asChild>
+                    <Link href="/">{commonT("home")}</Link>
+                  </BreadcrumbLink>
                 </BreadcrumbItem>
                 <BreadcrumbSeparator />
                 <BreadcrumbItem>
-                  <BreadcrumbLink href="/blog">
-                    {commonT("blog")}
+                  <BreadcrumbLink asChild>
+                    <Link href="/blog">{commonT("blog")}</Link>
                   </BreadcrumbLink>
                 </BreadcrumbItem>
                 <BreadcrumbSeparator />
@@ -76,7 +77,7 @@ export default async function BlogPost({ params }: { params: Params }) {
         </section>
         <main className="container max-w-5xl flex-1 pb-12">
           <article className="remark max-w-none">
-            <MDXRemote source={content} components={{ Projects, Link }} />
+            <MDXRemote source={content} />
           </article>
           <hr className="my-6 border-t" />
           <p className="font-mono text-xs text-muted-foreground">
@@ -109,6 +110,8 @@ export async function generateMetadata({ params }: { params: Params }) {
     const file = await fs.readFile(filePath, "utf8");
     const { data } = matter(file);
 
+    const enPath = `/blog/${slug}`;
+    const ptPath = `/pt-BR/blog/${slug}`;
     return {
       title: data.title,
       description: data.description,
@@ -117,21 +120,22 @@ export async function generateMetadata({ params }: { params: Params }) {
         title: data.title,
         description: data.description,
         type: "article",
-        url: `${process.env.NEXT_PUBLIC_SITE_URL}/${locale}/blog/${slug}`,
+        url: locale === "en" ? enPath : ptPath,
         publishedTime: data.date.toISOString(),
         authors: [data.author],
-        images: data.cover
-          ? [`${process.env.NEXT_PUBLIC_SITE_URL}/${data.cover}`]
-          : [`${process.env.NEXT_PUBLIC_SITE_URL}/john.jpg`],
       },
-      canonical: `${process.env.NEXT_PUBLIC_SITE_URL}/${locale}/blog/${slug}`,
+      alternates: {
+        canonical: locale === "en" ? enPath : ptPath,
+        languages: {
+          "en": enPath,
+          "pt-BR": ptPath,
+          "x-default": enPath,
+        },
+      },
       twitter: {
         card: "summary_large_image",
         title: data.title,
         description: data.description,
-        images: data.cover
-          ? [`${process.env.NEXT_PUBLIC_SITE_URL}/${data.cover}`]
-          : [`${process.env.NEXT_PUBLIC_SITE_URL}/john.jpg`],
       },
     };
   } catch (error) {

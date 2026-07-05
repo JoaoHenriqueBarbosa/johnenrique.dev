@@ -66,7 +66,9 @@ export default async function BlogIndex({
           <Breadcrumb>
             <BreadcrumbList>
               <BreadcrumbItem>
-                <BreadcrumbLink href="/">{commonT("home")}</BreadcrumbLink>
+                <BreadcrumbLink asChild>
+                  <Link href="/">{commonT("home")}</Link>
+                </BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator />
               <BreadcrumbItem>
@@ -126,5 +128,13 @@ export async function generateMetadata({
   return {
     title: t("blogTitle"),
     description: t("blogDescription"),
+    alternates: {
+      canonical: locale === "en" ? "/blog" : "/pt-BR/blog",
+      languages: {
+        "en": "/blog",
+        "pt-BR": "/pt-BR/blog",
+        "x-default": "/blog",
+      },
+    },
   };
 }
